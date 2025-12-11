@@ -79,6 +79,12 @@ impl SimpleComponent for App {
                     set_label: "Hello world!",
                     add_css_class: "title-header",
                     set_vexpand: true,
+                },
+                
+                gtk::Label {
+                    set_label: "Hello world!",
+                    add_css_class: "title-header",
+                    set_vexpand: true,
                 }
             }
 

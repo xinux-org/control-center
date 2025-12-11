@@ -10,17 +10,20 @@
 
     # The flake-utils library
     flake-utils.url = "github:numtide/flake-utils";
+
+    crane.url = "github:ipetkov/crane";
   };
 
   outputs = {
     self,
     nixpkgs,
     flake-utils,
+    crane,
     ...
   }:
-  # @ inputs
+  # @ inputs:
     flake-utils.lib.eachDefaultSystem (system: let
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import nixpkgs {inherit system;};
     in {
       # Nix script formatter
       formatter = pkgs.alejandra;
@@ -29,10 +32,6 @@
       devShells.default = import ./shell.nix {inherit pkgs;};
 
       # Output package
-      packages.default = pkgs.callPackage ./. {inherit pkgs;};
-    })
-    // {
-      # NixOS module (deployment)
-      nixosModules.bot = import ./module.nix self;
-    };
+      packages.default = pkgs.callPackage ./. {inherit pkgs crane;};
+    });
 }

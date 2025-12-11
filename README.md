@@ -55,6 +55,9 @@ There are basically 2 ways of building this project.
 All you need is nix package manager and the rest is already done for you:
 
 ```bash
+# Delete result and target folder then run
+cargo metadata
+
 # Build in nix environment
 nix build
 
