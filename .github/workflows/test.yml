@@ -19,6 +19,9 @@ jobs:
       - name: Check flake x86_64-linux host
         run: nix flake check --system x86_64-linux --show-trace
 
+      - name: Check flake aarch64-linux
+        run: nix flake check --system aarch64-linux --show-trace
+
   test-project:
     runs-on: ubuntu-latest
 

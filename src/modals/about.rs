@@ -16,19 +16,15 @@ impl SimpleComponent for AboutDialog {
     fn init_root() -> Self::Root {
         adw::AboutDialog::builder()
             .application_icon(APP_ID)
-            // Insert your license of choice here
-            // .license_type(gtk::License::MitX11)
-            // Insert your website here
-            // .website("https://gitlab.gnome.org/bilelmoussaoui/gtk-rust-template/")
-            // Insert your Issues page
-            // .issue_url("https://gitlab.gnome.org/World/Rust/gtk-rust-template/-/issues")
-            // Insert your application name here
-            .application_name("Relm4 Template")
+            .license_type(gtk::License::Apache20)
+            .website("https://xinux.uz/")
+            .issue_url("https://github.com/xinux-org/control-center/issues")
+            .application_name("Xinux Control Center")
             .version(VERSION)
             .translator_credits("translator-credits")
-            .copyright("© 2025 Bleur Developers")
-            .developers(vec!["Bleur Developers"])
-            .designers(vec!["Bleur Developers"])
+            .copyright("© 2025 Xinux Developers")
+            .developers(vec!["BeMeritus https://github.com/bemeritus"])
+            .designers(vec!["BeMeritus https://github.com/bemeritus"])
             .build()
     }
 
