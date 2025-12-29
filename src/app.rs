@@ -8,7 +8,7 @@ use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
 use crate::modals::{
-    about::AboutDialog, bluetooth::BluetoothModel, network::NetworkModel, wifi::WifiModel,
+    about::AboutDialog, bluetooth::BluetoothModel, network::NetworkModel, wifi::WifiModel, display::DisplayModel
 };
 use std::convert::identity;
 
@@ -16,6 +16,7 @@ pub(super) struct App {
     _wifi: Controller<WifiModel>,
     _network: Controller<NetworkModel>,
     _bluetooth: Controller<BluetoothModel>,
+    _display: Controller<DisplayModel>,
 }
 
 #[derive(Debug)]
@@ -120,6 +121,7 @@ impl SimpleComponent for App {
             add_titled: (wifi.widget(), Some("wifi"), "Wi-Fi"),
             add_titled: (network.widget(), Some("network"), "Network"),
             add_titled: (bluetooth.widget(), Some("bluetooth"), "Bluetooth"),
+            add_titled: (display.widget(), Some("display"), "Display"),
             set_vhomogeneous: false,
         }
     }
@@ -141,12 +143,17 @@ impl SimpleComponent for App {
             .launch(())
             .forward(sender.input_sender(), identity);
 
+        let display = DisplayModel::builder()
+        .launch(())
+        .forward(sender.input_sender(), identity);
+
         let widgets = view_output!();
 
         let model = App {
             _wifi: wifi,
             _network: network,
             _bluetooth: bluetooth,
+            _display: display,
         };
 
         widgets.stack.connect_visible_child_notify({
