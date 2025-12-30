@@ -7,8 +7,9 @@ use adw::prelude::*;
 use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
-use crate::modals::{
-    about::AboutDialog, bluetooth::BluetoothModel, network::NetworkModel, wifi::WifiModel, display::DisplayModel
+use crate::ui::{
+    about::AboutDialog, bluetooth::BluetoothModel, display::DisplayModel, network::NetworkModel,
+    notifications::NotificationsModel, wifi::WifiModel,
 };
 use std::convert::identity;
 
@@ -17,6 +18,7 @@ pub(super) struct App {
     _network: Controller<NetworkModel>,
     _bluetooth: Controller<BluetoothModel>,
     _display: Controller<DisplayModel>,
+    _notifications: Controller<NotificationsModel>,
 }
 
 #[derive(Debug)]
@@ -122,6 +124,7 @@ impl SimpleComponent for App {
             add_titled: (network.widget(), Some("network"), "Network"),
             add_titled: (bluetooth.widget(), Some("bluetooth"), "Bluetooth"),
             add_titled: (display.widget(), Some("display"), "Display"),
+            add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
             set_vhomogeneous: false,
         }
     }
@@ -144,8 +147,11 @@ impl SimpleComponent for App {
             .forward(sender.input_sender(), identity);
 
         let display = DisplayModel::builder()
-        .launch(())
-        .forward(sender.input_sender(), identity);
+            .launch(())
+            .forward(sender.input_sender(), identity);
+        let notifications = NotificationsModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
 
         let widgets = view_output!();
 
@@ -154,6 +160,7 @@ impl SimpleComponent for App {
             _network: network,
             _bluetooth: bluetooth,
             _display: display,
+            _notifications: notifications,
         };
 
         widgets.stack.connect_visible_child_notify({
