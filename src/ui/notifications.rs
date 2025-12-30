@@ -43,46 +43,21 @@ impl SimpleComponent for NotificationsModel {
                 set_title: "App Notifications",
 
                 adw::ActionRow {
-                    set_title: "HuaweiNetwork",
-                    set_subtitle: "Connected",
+                    set_title: "Web",
                     set_activatable: true,
-
-                    add_prefix = &gtk::Image {
-                        set_icon_name: Some("network-wireless-symbolic"),
-                        set_pixel_size: 16,
-                    },
 
                     add_suffix = &gtk::Box {
-                        set_orientation: gtk::Orientation::Horizontal,
                         set_spacing: 6,
 
-                        gtk::Button {
-                            set_icon_name: "qr-code-symbolic",
-                            add_css_class: "flat",
-                            set_valign: gtk::Align::Center,
+                        gtk::Label {
+                            set_label: "Off",
+                            add_css_class: "dim-label",
                         },
 
-                        gtk::Button {
-                            set_icon_name: "emblem-system-symbolic",
-                            add_css_class: "flat",
-                            set_valign: gtk::Align::Center,
+                        gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
                         }
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: "Jamshidbek",
-                    set_activatable: true,
-
-                    add_prefix = &gtk::Image {
-                        set_icon_name: Some("network-wireless-symbolic"),
-                        set_pixel_size: 16,
-                    },
-
-                    add_suffix = &gtk::Button {
-                        set_icon_name: "emblem-system-symbolic",
-                        add_css_class: "flat",
-                        set_valign: gtk::Align::Center,
                     }
                 },
             }
