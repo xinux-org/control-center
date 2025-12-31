@@ -4,3 +4,4 @@ pub mod display;
 pub mod network;
 pub mod notifications;
 pub mod wifi;
+pub mod sound;

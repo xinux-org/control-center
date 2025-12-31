@@ -1,4 +1,5 @@
 use crate::RelmActionGroup;
+use crate::ui::sound::SoundModel;
 use relm4::*;
 
 use relm4::actions::RelmAction;
@@ -19,6 +20,7 @@ pub(super) struct App {
     _bluetooth: Controller<BluetoothModel>,
     _display: Controller<DisplayModel>,
     _notifications: Controller<NotificationsModel>,
+    _sound: Controller<SoundModel>,
 }
 
 #[derive(Debug)]
@@ -124,6 +126,7 @@ impl SimpleComponent for App {
             add_titled: (network.widget(), Some("network"), "Network"),
             add_titled: (bluetooth.widget(), Some("bluetooth"), "Bluetooth"),
             add_titled: (display.widget(), Some("display"), "Display"),
+            add_titled: (sound.widget(), Some("sound"), "Sound"),
             add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
             set_vhomogeneous: false,
         }
@@ -149,6 +152,9 @@ impl SimpleComponent for App {
         let display = DisplayModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let sound = SoundModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
         let notifications = NotificationsModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
@@ -160,6 +166,7 @@ impl SimpleComponent for App {
             _network: network,
             _bluetooth: bluetooth,
             _display: display,
+            _sound: sound,
             _notifications: notifications,
         };
 
