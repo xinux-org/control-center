@@ -15,7 +15,15 @@ impl SimpleComponent for SoundModel {
     view! {
         #[root]
         adw::PreferencesGroup {
-            adw::HeaderBar {},
+            adw::HeaderBar {
+              #[wrap(Some)]
+              set_title_widget = &gtk::Box {
+                add_css_class: "linked",
+                gtk::Label {
+                  set_label: "Sound",
+                }
+              },
+            },
 
             adw::PreferencesPage {
                 adw::PreferencesGroup {
@@ -70,9 +78,9 @@ impl SimpleComponent for SoundModel {
                             set_valign: gtk::Align::Center,
                             set_width_request: 300,
                             set_draw_value: false,
-                            set_range: (-1.0, 1.0),  
-                            set_value: 0.0,           
-                            add_css_class: "balance-scale", 
+                            set_range: (-1.0, 1.0),
+                            set_value: 0.0,
+                            add_css_class: "balance-scale",
                             add_mark: (0.0, gtk::PositionType::Bottom, None),
                         }
                     },

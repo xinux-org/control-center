@@ -16,9 +16,12 @@ impl SimpleComponent for DisplayModel {
         #[root]
         adw::PreferencesGroup {
             adw::HeaderBar {
-                pack_start = &gtk::Label {
-                    set_label: "Bluetooth",
+              #[wrap(Some)]
+              set_title_widget = &gtk::Box {
+                gtk::Label {
+                  set_label: "Display",
                 }
+              },
             },
             adw::PreferencesPage {
                 adw::PreferencesGroup {

@@ -16,11 +16,12 @@ impl SimpleComponent for BluetoothModel {
         #[root]
         adw::PreferencesGroup {
             adw::HeaderBar {
-
-                pack_start = &gtk::Label {
+                #[wrap(Some)]
+                set_title_widget = &gtk::Box {
+                  gtk::Label {
                     set_label: "Bluetooth",
+                  }
                 },
-
                 pack_end = &gtk::Switch {
                     set_active: true,
                     set_valign: gtk::Align::Center,

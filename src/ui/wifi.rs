@@ -14,7 +14,14 @@ impl SimpleComponent for WifiModel {
 
     view! {
         adw::PreferencesGroup {
-            adw::HeaderBar {},
+            adw::HeaderBar {
+              #[wrap(Some)]
+              set_title_widget = &gtk::Box {
+                gtk::Label {
+                  set_label: "Wifi",
+                }
+              },
+            },
 
             adw::PreferencesPage {
 
