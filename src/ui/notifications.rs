@@ -20,15 +20,7 @@ impl SimpleComponent for NotificationsModel {
                     set_title: "Notifications"
                 }
             },
-<<<<<<< HEAD
-=======
 
-            adw::PreferencesPage {
-                adw::PreferencesGroup {
-                    adw::ActionRow {
-                        set_title: "Do Not Disturb",
-                        set_activatable: true,
->>>>>>> 05fcd61 (merge)
 
 
         adw::PreferencesGroup {
