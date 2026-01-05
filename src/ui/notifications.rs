@@ -13,19 +13,16 @@ impl SimpleComponent for NotificationsModel {
     type Output = AppMsg;
 
     view! {
-        adw::PreferencesGroup {
-            adw::HeaderBar {
-              #[wrap(Some)]
-              set_title_widget = &gtk::Box {
-                gtk::Label {
-                  set_label: "Notifications",
+        adw::ToolbarView {
+            add_top_bar = &adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle{
+                    set_title: "Notifications"
                 }
-              },
             },
 
-            adw::PreferencesPage {
 
-            adw::PreferencesGroup {
+        adw::PreferencesGroup {
                 adw::ActionRow {
                     set_title: "Do Not Disturb",
                     set_activatable: true,
@@ -65,10 +62,9 @@ impl SimpleComponent for NotificationsModel {
                             set_icon_name: Some("go-next-symbolic"),
                             set_pixel_size: 16,
                         }
-                    }
+                    },
                 },
-            }
-        }
+            },
         }
     }
 

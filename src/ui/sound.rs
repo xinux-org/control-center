@@ -14,15 +14,12 @@ impl SimpleComponent for SoundModel {
 
     view! {
         #[root]
-        adw::PreferencesGroup {
-            adw::HeaderBar {
-              #[wrap(Some)]
-              set_title_widget = &gtk::Box {
-                add_css_class: "linked",
-                gtk::Label {
-                  set_label: "Sound",
-                }
-              },
+        adw::ToolbarView {
+            add_top_bar = &adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle {
+                    set_title: "Sound",
+                },
             },
 
             adw::PreferencesPage {

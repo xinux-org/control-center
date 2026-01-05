@@ -13,74 +13,73 @@ impl SimpleComponent for NetworkModel {
     type Output = AppMsg;
 
     view! {
-      adw::PreferencesGroup{
-        adw::HeaderBar {
+      adw::ToolbarView{
+        add_top_bar = &adw::HeaderBar {
           #[wrap(Some)]
-          set_title_widget = &gtk::Box {
-            gtk::Label {
-              set_label: "Network",
+          set_title_widget = &adw::WindowTitle {
+            set_title: "Network",
+          }
+        },
+
+        adw::PreferencesPage {
+          adw::PreferencesGroup {
+            set_title: "Wired",
+
+            #[wrap(Some)]
+            set_header_suffix = &gtk::Button {
+              set_icon_name: "list-add-symbolic",
+              add_css_class: "flat",
+              set_valign: gtk::Align::Center,
+            },
+
+            adw::ActionRow {
+              set_title: "Cable unplugged",
+              set_activatable: true,
+
+              add_suffix = &gtk::Switch {
+                set_active: true,
+                set_valign: gtk::Align::Center,
+              },
+              add_suffix = &gtk::Button {
+                set_icon_name: "emblem-system-symbolic",
+                add_css_class: "flat",
+                set_valign: gtk::Align::Center,
+              }
             }
           },
-        },
-        adw::PreferencesPage {
-            adw::PreferencesGroup {
-              set_title: "Wired",
 
-              #[wrap(Some)]
-              set_header_suffix = &gtk::Button {
-                set_icon_name: "list-add-symbolic",
-                add_css_class: "flat",
-                set_valign: gtk::Align::Center,
-              },
+          adw::PreferencesGroup {
+            set_title: "VPN",
 
-                adw::ActionRow {
-                    set_title: "Cable unplugged",
-                    set_activatable: true,
-
-                    add_suffix = &gtk::Switch {
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
-                    },
-                    add_suffix = &gtk::Button {
-                      set_icon_name: "emblem-system-symbolic",
-                      add_css_class: "flat",
-                      set_valign: gtk::Align::Center,
-                    }
-                }
+            #[wrap(Some)]
+            set_header_suffix = &gtk::Button {
+              set_icon_name: "list-add-symbolic",
+              add_css_class: "flat",
+              set_valign: gtk::Align::Center,
             },
 
-            adw::PreferencesGroup {
-              set_title: "VPN",
+              adw::ActionRow {
+                set_title: "Not set up",
+                set_activatable: true,
+              }
+          },
 
-              #[wrap(Some)]
-              set_header_suffix = &gtk::Button {
-                set_icon_name: "list-add-symbolic",
-                add_css_class: "flat",
-                set_valign: gtk::Align::Center,
-              },
+          adw::PreferencesGroup {
+            set_title: "Proxy",
+              adw::ActionRow {
+                add_prefix = &gtk::Image {
+                  set_icon_name: Some("network-proxy-server-symbolic"),
+                  set_pixel_size: 16,
+                },
+                set_title: "Proxy",
+                set_activatable: true,
 
-                adw::ActionRow {
-                    set_title: "Not set up",
-                    set_activatable: true,
+                add_suffix = &gtk::Image {
+                  set_icon_name: Some("go-next-symbolic"),
+                  set_pixel_size: 16,
                 }
-            },
-
-            adw::PreferencesGroup {
-              set_title: "Proxy",
-                adw::ActionRow {
-                  add_prefix = &gtk::Image {
-                    set_icon_name: Some("network-proxy-server-symbolic"),
-                    set_pixel_size: 16,
-                  },
-                  set_title: "Proxy",
-                  set_activatable: true,
-
-                  add_suffix = &gtk::Image {
-                      set_icon_name: Some("go-next-symbolic"),
-                      set_pixel_size: 16,
-                  }
-                }
-            },
+              }
+          },
         }
       }
     }

@@ -14,14 +14,13 @@ impl SimpleComponent for BluetoothModel {
 
     view! {
         #[root]
-        adw::PreferencesGroup {
-            adw::HeaderBar {
+        adw::ToolbarView {
+            add_top_bar = &adw::HeaderBar {
                 #[wrap(Some)]
-                set_title_widget = &gtk::Box {
-                  gtk::Label {
-                    set_label: "Bluetooth",
-                  }
+                set_title_widget = &adw::WindowTitle {
+                    set_title: "Bluetooth",
                 },
+
                 pack_end = &gtk::Switch {
                     set_active: true,
                     set_valign: gtk::Align::Center,
