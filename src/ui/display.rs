@@ -14,20 +14,16 @@ impl SimpleComponent for DisplayModel {
 
     view! {
         #[root]
-        adw::PreferencesGroup {
-            adw::HeaderBar {
-              #[wrap(Some)]
-              set_title_widget = &gtk::Box {
-                gtk::Label {
-                  set_label: "Display",
+        adw::ToolbarView {
+            add_top_bar = &adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle {
+                    set_title: "Displays",
                 }
-              },
             },
             adw::PreferencesPage {
                 adw::PreferencesGroup {
                     // set_title: "Devices",
-
-
                     adw::ComboRow {
                         set_title: "Orientantion",
                         #[wrap(Some)]
@@ -98,28 +94,28 @@ impl SimpleComponent for DisplayModel {
                 },
 
                 adw::PreferencesGroup {
-                        adw::ActionRow {
-                            set_title: "Night Light",
-                            set_activatable: true,
+                    adw::ActionRow {
+                        set_title: "Night Light",
+                        set_activatable: true,
 
-                            add_prefix = &gtk::Image {
-                                set_icon_name: Some("night-light-symbolic"),
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("night-light-symbolic"),
+                        },
+
+                        add_suffix = &gtk::Box {
+                            set_spacing: 12,
+                            set_halign: gtk::Align::End,
+
+                            gtk::Label {
+                                set_label: "Off",
+                                add_css_class: "dim-label",
                             },
 
-                            add_suffix = &gtk::Box {
-                                set_spacing: 12,
-                                set_halign: gtk::Align::End,
-
-                                gtk::Label {
-                                    set_label: "Off",
-                                    add_css_class: "dim-label",
-                                },
-
-                                gtk::Image {
-                                    set_icon_name: Some("go-next-symbolic"),
-                                },
-                            }
-                        },
+                            gtk::Image {
+                                set_icon_name: Some("go-next-symbolic"),
+                            },
+                        }
+                    },
                 },
             }
         }

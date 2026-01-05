@@ -13,123 +13,120 @@ impl SimpleComponent for WifiModel {
     type Output = AppMsg;
 
     view! {
-        adw::PreferencesGroup {
-            adw::HeaderBar {
-              #[wrap(Some)]
-              set_title_widget = &gtk::Box {
-                gtk::Label {
-                  set_label: "Wifi",
+        adw::ToolbarView {
+            add_top_bar = &adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle {
+                    set_title: "Wifi",
                 }
-              },
             },
 
             adw::PreferencesPage {
+                adw::PreferencesGroup {
+                    adw::ActionRow {
+                        set_title: "Wi-Fi",
+                        set_activatable: true,
 
-            adw::PreferencesGroup {
-                adw::ActionRow {
-                    set_title: "Wi-Fi",
-                    set_activatable: true,
-
-                    add_suffix = &gtk::Switch {
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
-                    }
-                }
-            },
-
-            adw::PreferencesGroup {
-                adw::ActionRow {
-                    set_title: "Saved Networks",
-                    set_activatable: true,
-
-                    add_suffix = &gtk::Image {
-                        set_icon_name: Some("go-next-symbolic"),
-                        set_pixel_size: 16,
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: "Connect to Hidden Network...",
-                    set_activatable: true,
-
-                    add_suffix = &gtk::Image {
-                        set_icon_name: Some("go-next-symbolic"),
-                        set_pixel_size: 16,
-                    }
-                },
-
-                adw::ActionRow {
-                    set_title: "Turn On Wi-Fi Hotspot...",
-                    set_activatable: true,
-
-                    add_suffix = &gtk::Image {
-                        set_icon_name: Some("go-next-symbolic"),
-                        set_pixel_size: 16,
-                    }
-                }
-            },
-
-            adw::PreferencesGroup {
-                adw::ActionRow {
-                    set_title: "Airplane Mode",
-                    set_subtitle: "Disables Wi-Fi, Bluetooth and mobile broadband",
-                    set_activatable: true,
-
-                    add_suffix = &gtk::Switch {
-                        set_active: false,
-                        set_valign: gtk::Align::Center,
-                    }
-                }
-            },
-
-            adw::PreferencesGroup {
-                set_title: "Visible Networks",
-
-                adw::ActionRow {
-                    set_title: "HuaweiNetwork",
-                    set_subtitle: "Connected",
-                    set_activatable: true,
-
-                    add_prefix = &gtk::Image {
-                        set_icon_name: Some("network-wireless-symbolic"),
-                        set_pixel_size: 16,
-                    },
-
-                    add_suffix = &gtk::Box {
-                        set_orientation: gtk::Orientation::Horizontal,
-                        set_spacing: 6,
-
-                        gtk::Button {
-                            set_icon_name: "qr-code-symbolic",
-                            add_css_class: "flat",
-                            set_valign: gtk::Align::Center,
-                        },
-
-                        gtk::Button {
-                            set_icon_name: "emblem-system-symbolic",
-                            add_css_class: "flat",
+                        add_suffix = &gtk::Switch {
+                            set_active: true,
                             set_valign: gtk::Align::Center,
                         }
                     }
                 },
 
-                adw::ActionRow {
-                    set_title: "Jamshidbek",
-                    set_activatable: true,
+                adw::PreferencesGroup {
+                    adw::ActionRow {
+                        set_title: "Saved Networks",
+                        set_activatable: true,
 
-                    add_prefix = &gtk::Image {
-                        set_icon_name: Some("network-wireless-symbolic"),
-                        set_pixel_size: 16,
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
                     },
 
-                    add_suffix = &gtk::Button {
-                        set_icon_name: "emblem-system-symbolic",
-                        add_css_class: "flat",
-                        set_valign: gtk::Align::Center,
+                    adw::ActionRow {
+                        set_title: "Connect to Hidden Network...",
+                        set_activatable: true,
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Turn On Wi-Fi Hotspot...",
+                        set_activatable: true,
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
                     }
                 },
+
+                adw::PreferencesGroup {
+                    adw::ActionRow {
+                        set_title: "Airplane Mode",
+                        set_subtitle: "Disables Wi-Fi, Bluetooth and mobile broadband",
+                        set_activatable: true,
+
+                        add_suffix = &gtk::Switch {
+                            set_active: false,
+                            set_valign: gtk::Align::Center,
+                        }
+                    }
+                },
+
+                adw::PreferencesGroup {
+                    set_title: "Visible Networks",
+
+                    adw::ActionRow {
+                        set_title: "HuaweiNetwork",
+                        set_subtitle: "Connected",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("network-wireless-symbolic"),
+                            set_pixel_size: 16,
+                        },
+
+                        add_suffix = &gtk::Box {
+                            set_orientation: gtk::Orientation::Horizontal,
+                            set_spacing: 6,
+
+                            gtk::Button {
+                                set_icon_name: "qr-code-symbolic",
+                                add_css_class: "flat",
+                                set_valign: gtk::Align::Center,
+                            },
+
+                            gtk::Button {
+                                set_icon_name: "emblem-system-symbolic",
+                                add_css_class: "flat",
+                                set_valign: gtk::Align::Center,
+                            }
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Jamshidbek",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("network-wireless-symbolic"),
+                            set_pixel_size: 16,
+                        },
+
+                        add_suffix = &gtk::Button {
+                            set_icon_name: "emblem-system-symbolic",
+                            add_css_class: "flat",
+                            set_valign: gtk::Align::Center,
+                        }
+                    },
+                }
             }
-        }
         }
     }
 
