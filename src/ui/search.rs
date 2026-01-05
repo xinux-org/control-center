@@ -20,7 +20,7 @@ impl SimpleComponent for SearchModal {
 
             adw::PreferencesGroup {
                 adw::ActionRow {
-                    set_title: "Do Not Disturb",
+                    set_title: "App Search",
                     set_activatable: true,
 
                     add_suffix = &gtk::Switch {
@@ -28,8 +28,9 @@ impl SimpleComponent for SearchModal {
                         set_valign: gtk::Align::Center,
                     }
                 },
+
                 adw::ActionRow {
-                    set_title: "Lock Screen Notifications",
+                    set_title: "Search Locations",
                     set_activatable: true,
 
                     add_suffix = &gtk::Switch {
@@ -39,33 +40,6 @@ impl SimpleComponent for SearchModal {
                 }
             },
 
-            adw::PreferencesGroup {
-                set_title: "App Notifications",
-
-                gtk::SearchEntry {
-                    set_placeholder_text: Some("Search"),
-                },
-
-
-                adw::ActionRow {
-                    set_title: "Web",
-                    set_activatable: true,
-
-                    add_suffix = &gtk::Box {
-                        set_spacing: 6,
-
-                        gtk::Label {
-                            set_label: "Off",
-                            add_css_class: "dim-label",
-                        },
-
-                        gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    }
-                },
-            }
         }
         }
     }

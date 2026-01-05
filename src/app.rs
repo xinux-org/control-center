@@ -9,8 +9,8 @@ use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
-    about::AboutDialog, bluetooth::BluetoothModel, display::DisplayModel, network::NetworkModel,
-    notifications::NotificationsModel, search::SearchModal, wifi::WifiModel,
+    about::AboutDialog, apps::AppModal, bluetooth::BluetoothModel, display::DisplayModel,
+    network::NetworkModel, notifications::NotificationsModel, search::SearchModal, wifi::WifiModel,
 };
 use std::convert::identity;
 
@@ -22,6 +22,7 @@ pub(super) struct App {
     _notifications: Controller<NotificationsModel>,
     _sound: Controller<SoundModel>,
     _search: Controller<SearchModal>,
+    _apps: Controller<AppModal>,
 }
 
 #[derive(Debug)]
@@ -130,6 +131,7 @@ impl SimpleComponent for App {
             add_titled: (sound.widget(), Some("sound"), "Sound"),
             add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
             add_titled: (search.widget(), Some("search"), "Search"),
+            add_titled: (apps.widget(), Some("apps"), "Apps"),
             set_vhomogeneous: false,
         }
     }
@@ -164,6 +166,10 @@ impl SimpleComponent for App {
             .launch(())
             .forward(sender.input_sender(), identity);
 
+        let apps = AppModal::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
+
         let widgets = view_output!();
 
         let model = App {
@@ -174,6 +180,7 @@ impl SimpleComponent for App {
             _sound: sound,
             _notifications: notifications,
             _search: search,
+            _apps: apps,
         };
 
         widgets.stack.connect_visible_child_notify({
