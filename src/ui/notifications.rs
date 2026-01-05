@@ -28,24 +28,20 @@ impl SimpleComponent for NotificationsModel {
                     set_title: "Do Not Disturb",
                     set_activatable: true,
 
-                    add_suffix = &gtk::Switch {
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
+                        add_suffix = &gtk::Switch {
+                            set_active: true,
+                            set_valign: gtk::Align::Center,
+                        }
                     }
                 },
-                adw::ActionRow {
-                    set_title: "Lock Screen Notifications",
-                    set_activatable: true,
 
-                    add_suffix = &gtk::Switch {
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
-                    }
-                }
-            },
+                adw::PreferencesGroup {
+                    set_title: "App Notifications",
 
-            adw::PreferencesGroup {
-                set_title: "App Notifications",
+                    adw::ActionRow {
+                        set_title: "HuaweiNetwork",
+                        set_subtitle: "Connected",
+                        set_activatable: true,
 
                 adw::ActionRow {
                     set_title: "Web",
