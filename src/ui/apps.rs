@@ -13,9 +13,13 @@ impl SimpleComponent for AppModal {
     type Output = AppMsg;
 
     view! {
-        adw::PreferencesGroup {
-            adw::HeaderBar {},
-
+       adw::ToolbarView {
+            add_top_bar = &adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle{
+                    set_title: "Apps"
+                }
+            },
             adw::PreferencesPage {
                 adw::PreferencesGroup {
                     set_width_request: 300,

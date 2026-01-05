@@ -13,8 +13,13 @@ impl SimpleComponent for SearchModal {
     type Output = AppMsg;
 
     view! {
-        adw::PreferencesGroup {
-            adw::HeaderBar {},
+        adw::ToolbarView {
+            add_top_bar = &adw::HeaderBar {
+                #[wrap(Some)]
+                set_title_widget = &adw::WindowTitle{
+                    set_title: "Search"
+                }
+            },
 
             adw::PreferencesPage {
 
