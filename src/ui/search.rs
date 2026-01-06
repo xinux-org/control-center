@@ -14,6 +14,7 @@ impl SimpleComponent for SearchModal {
 
     view! {
         adw::ToolbarView {
+            set_top_bar_style: adw::ToolbarStyle::Flat,
             add_top_bar = &adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle{

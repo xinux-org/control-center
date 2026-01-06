@@ -14,13 +14,15 @@ impl SimpleComponent for NotificationsModel {
 
     view! {
         adw::ToolbarView {
+            set_top_bar_style: adw::ToolbarStyle::Flat,
+
             add_top_bar = &adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle{
                     set_title: "Notifications"
                 }
             },
-            
+
             adw::PreferencesPage {
                 adw::PreferencesGroup {
                     adw::ActionRow {

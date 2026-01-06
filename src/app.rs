@@ -10,7 +10,8 @@ use gtk::{gio, glib};
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
     about::AboutDialog, apps::AppModal, bluetooth::BluetoothModel, display::DisplayModel,
-    network::NetworkModel, notifications::NotificationsModel, search::SearchModal, wifi::WifiModel,
+    network::NetworkModel, notifications::NotificationsModel, power::PowerModel,
+    search::SearchModal, wifi::WifiModel,
 };
 use std::convert::identity;
 
@@ -23,6 +24,7 @@ pub(super) struct App {
     _sound: Controller<SoundModel>,
     _search: Controller<SearchModal>,
     _apps: Controller<AppModal>,
+    _power: Controller<PowerModel>,
 }
 
 #[derive(Debug)]
@@ -132,6 +134,7 @@ impl SimpleComponent for App {
             add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
             add_titled: (search.widget(), Some("search"), "Search"),
             add_titled: (apps.widget(), Some("apps"), "Apps"),
+            add_titled: (power.widget(), Some("power"), "Power"),
             set_vhomogeneous: false,
         }
     }
@@ -165,8 +168,10 @@ impl SimpleComponent for App {
         let search = SearchModal::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-
         let apps = AppModal::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
+        let power = PowerModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
 
@@ -181,6 +186,7 @@ impl SimpleComponent for App {
             _notifications: notifications,
             _search: search,
             _apps: apps,
+            _power: power,
         };
 
         widgets.stack.connect_visible_child_notify({
