@@ -209,11 +209,111 @@ impl SimpleComponent for PowerModel {
                             add_titled_with_icon[Some("power-saving"), "Power Saving", "battery-symbolic"] = &gtk::Box {
                                 set_orientation: gtk::Orientation::Vertical,
                                 set_spacing: 12,
+                                adw::PreferencesGroup {
+                                    adw::ActionRow {
+                                        set_title: "Automic Power Saver",
+                                        set_subtitle: "Turn on power saver made when battery power is low",
 
-                                gtk::Label {
-                                    set_label: "Power Saving Options",
-                                    set_halign: gtk::Align::Start,
+                                        add_suffix = &gtk::Switch {
+                                            set_active: true,
+                                            set_valign: gtk::Align::Center,
+                                        }
+                                    }
                                 },
+
+                                adw::PreferencesGroup {
+                                    adw::ActionRow {
+                                        set_title: "Automatic Screen Blank",
+                                        set_subtitle: "Turn the screen off after a period of inactivity",
+
+                                        add_suffix = &gtk::Switch {
+                                            set_active: true,
+                                            set_valign: gtk::Align::Center,
+                                        }
+                                    },
+
+                                    adw::ComboRow {
+                                        set_title: "Delay",
+                                        set_model: Some(&gtk::StringList::new(&[
+                                            "1 minute",
+                                            "2 minute",
+                                            "3 minute",
+                                            "4 minute",
+                                            "5 minute",
+                                            "8 minute",
+                                            "10 minute",
+                                            "12 minute",
+                                            "15 minute",
+                                        ])),
+                                    }
+                                },
+
+                                adw::PreferencesGroup {
+                                    set_title: "Automatic Suspend",
+
+                                    adw::ActionRow {
+                                        set_title: "On Battery Power",
+
+                                        add_suffix = &gtk::Switch{
+                                            set_active: true,
+                                            set_valign: gtk::Align::Center,
+                                        }
+                                    },
+
+                                    adw::ComboRow {
+                                        set_title: "Delay",
+                                        set_model: Some(&gtk::StringList::new(&[
+                                            "15 minute",
+                                            "20 minute",
+                                            "25 minute",
+                                            "30 minute",
+                                            "45 minute",
+                                            "1 hour",
+                                            "1 hour 20 minute",
+                                            "1 hour 30 minute",
+                                            "1 hour 40 minute",
+                                            "2 hours",
+                                        ])),
+                                    }
+                                },
+
+                                adw::PreferencesGroup {
+                                    adw::ActionRow {
+                                        set_title: "When plugged",
+                                        
+                                        add_suffix = &gtk::Switch{
+                                            set_active: true,
+                                            set_valign: gtk::Align::Center,
+                                        }
+                                    },
+                                    
+                                    adw::ComboRow {
+                                        set_title: "Delay",
+                                        set_model: Some(&gtk::StringList::new(&[
+                                            "15 minute",
+                                            "20 minute",
+                                            "25 minute",
+                                            "30 minute",
+                                            "45 minute",
+                                            "1 hour",
+                                            "1 hour 20 minute",
+                                            "1 hour 30 minute",
+                                            "1 hour 40 minute",
+                                            "2 hours",
+                                        ])),
+                                    }
+                                },
+
+                                adw::PreferencesGroup {
+                                    adw::ActionRow {
+                                        set_title: "Disabling automatic suspend will result in higher power consumption. It is recomended to keep automatic suspend enabled.",
+                                        
+                                        add_prefix = &gtk::Image {
+                                            set_icon_name: Some("issue-symbolic"),
+                                            set_pixel_size: 16,
+                                        }
+                                    }
+                                }
                             },
                         },
                     },
