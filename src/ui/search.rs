@@ -41,19 +41,17 @@ impl SimpleComponent for SearchLocationsPage {
                     }
                 },
 
-                gtk::Box {
-                    set_margin_top: 10,
-                    set_hexpand: true,
-
-                    gtk::Label {
-                        set_halign: gtk::Align::Center,
-                        set_label: "Filesystem locations which are selected by system apps, such as Files",
-                        add_css_class: "grey_color",
-                    },
-                },
-
                 adw::PreferencesPage {
-                    set_halign: gtk::Align::Fill,
+                    adw::PreferencesGroup{
+                        gtk::Label {
+                            set_halign: gtk::Align::Center,
+                            set_label: "Filesystem locations which are selected by system apps, such as Files",
+                            add_css_class: "grey_color",
+                        },
+                    },
+
+                
+                    // set_halign: gtk::Align::Fill,
 
                     adw::PreferencesGroup {
                         set_title: "Default Locations",
@@ -61,35 +59,36 @@ impl SimpleComponent for SearchLocationsPage {
 
                         adw::ActionRow {
                             set_title: "Home",
-                            set_hexpand: true,
+                            // set_hexpand: true,
                             set_subtitle: "Subfolders must be manually added for this locaiton",
-                            set_activatable: true,
+                            // set_activatable: true,
 
                             add_suffix = &gtk::Switch {
                                 set_active: true,
                                 set_valign: gtk::Align::Center,
                             },
-                       },
+                        },
                     },
 
                     adw::PreferencesGroup {
                         set_title: "Custom Locations",
-                        set_halign: gtk::Align::Center,
+                        // set_halign: gtk::Align::Center,
 
                         adw::ActionRow {
                             set_title: "Desktop",
                             set_subtitle: "Location not found",
-                            set_activatable: true,
-                            set_hexpand: true,
+                            // set_activatable: true,
+                            // set_hexpand: true,
 
                             add_suffix = &gtk::Box {
                                 set_orientation: gtk::Orientation::Horizontal,
-                                set_hexpand: true,
+                                set_spacing: 6,
+                                // set_hexpand: true,
 
                                 gtk::Button {
                                     set_icon_name: "document-open",
                                     add_css_class: "flat",
-                                    set_valign: gtk::Align::Center,
+                                    // set_valign: gtk::Align::Center,
                                 },
 
                                 gtk::Button {
@@ -104,13 +103,9 @@ impl SimpleComponent for SearchLocationsPage {
                             set_title: "Add Location",
                             set_activatable: true,
 
-                            set_hexpand: true,
-
-                            add_prefix = &gtk::Button {
-                                set_icon_name: "value-increase",
-                                add_css_class: "flat",
-                                set_valign: gtk::Align::End,
-                                set_margin_bottom: 10,
+                            add_prefix = &gtk::Image {
+                                set_icon_name: Some("list-add-symbolic"),
+                                set_valign: gtk::Align::Center,
                             }
                         },
                     }
