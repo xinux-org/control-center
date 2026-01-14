@@ -41,17 +41,21 @@ impl SimpleComponent for SearchLocationsPage {
                     }
                 },
 
-                adw::PreferencesPage {
-                    adw::PreferencesGroup{
+
+                gtk::Box {
+                    set_halign: gtk::Align::Center,
+                    set_orientation: gtk::Orientation::Vertical,
+
+                    gtk::Box {
+                        set_margin_top: 10,
+                        set_hexpand: true,
+
                         gtk::Label {
                             set_halign: gtk::Align::Center,
                             set_label: "Filesystem locations which are selected by system apps, such as Files",
                             add_css_class: "grey_color",
                         },
                     },
-
-                
-                    // set_halign: gtk::Align::Fill,
 
                     adw::PreferencesGroup {
                         set_title: "Default Locations",
@@ -81,20 +85,13 @@ impl SimpleComponent for SearchLocationsPage {
                             // set_hexpand: true,
 
                             add_suffix = &gtk::Box {
-                                set_orientation: gtk::Orientation::Horizontal,
-                                set_spacing: 6,
-                                // set_hexpand: true,
+                                set_orientation: gtk::Orientation::Vertical,
+                                set_hexpand: true,
 
                                 gtk::Button {
                                     set_icon_name: "document-open",
-                                    add_css_class: "flat",
-                                    // set_valign: gtk::Align::Center,
-                                },
-
-                                gtk::Button {
                                     set_icon_name: "edit-delete",
                                     add_css_class: "flat",
-                                    set_valign: gtk::Align::Center,
                                 }
                             }
                         },
