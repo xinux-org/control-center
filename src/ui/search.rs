@@ -64,7 +64,7 @@ impl SimpleComponent for SearchLocationsPage {
                         adw::ActionRow {
                             set_title: "Home",
                             // set_hexpand: true,
-                            set_subtitle: "Subfolders must be manually added for this locaiton",
+                            set_subtitle: "Subfolders must be manually added for this location",
                             // set_activatable: true,
 
                             add_suffix = &gtk::Switch {
@@ -90,15 +90,28 @@ impl SimpleComponent for SearchLocationsPage {
 
                                 gtk::Button {
                                     set_icon_name: "document-open",
+                                    add_css_class: "flat",
+                                }
+                            },
+
+                            add_suffix = &gtk::Box {
+                                set_orientation: gtk::Orientation::Vertical,
+                                set_hexpand: true,
+
+                                gtk::Button {
                                     set_icon_name: "edit-delete",
                                     add_css_class: "flat",
                                 }
                             }
+
                         },
 
                         adw::ActionRow {
                             set_title: "Add Location",
                             set_activatable: true,
+                            set_halign: gtk::Align::Center,
+
+                            add_css_class: "bold",
 
                             add_prefix = &gtk::Image {
                                 set_icon_name: Some("list-add-symbolic"),
