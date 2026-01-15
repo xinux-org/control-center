@@ -1,19 +1,19 @@
 [package]
 name = "control-center"
 version = "0.1.0"
-edition = "2021"
-license = "MIT OR Apache-2.0"
-description = "#description#"
-homepage = "#website#"
-repository = "#repository#"
-authors = ["#author#"]
+edition = "2024"
+license = "GPL-2.0"
+description = "Xinux gtk/libadwaita settings app"
+homepage = "https://github.com/xinux-org/settings"
+repository = "https://github.com/xinux-org/settings"
+authors = ["bemeritus", "ae5259"]
 publish = false
 
 [profile.release]
 lto = true
 
 [dependencies]
-gettext-rs = { version = "0.7", features = ["gettext-system"] }
+gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
 relm4 = { version = "0.9.1", features = ["libadwaita", "gnome_47"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3"
