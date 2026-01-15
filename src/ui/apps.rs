@@ -35,6 +35,16 @@ impl SimpleComponent for AppModal {
                     adw::ActionRow {
                         set_title: "Default Apps",
                         set_activatable: true,
+                        set_subtitle: "Decide which apps open links, files, and media",
+
+
+                        add_suffix = &gtk::Button {
+                            set_icon_name: "go-next",
+                            add_css_class: "flat",
+
+                            set_valign: gtk::Align::Center,
+
+                        }
                     },
                 },
             }

@@ -2,3 +2,11 @@
   font-size: 36px;
   font-weight: bold;
 }
+
+.grey_color {
+  color: grey;
+}
+
+.bold {
+  font-weight: bold;
+}
