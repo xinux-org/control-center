@@ -81,29 +81,25 @@ impl SimpleComponent for SearchLocationsPage {
                         adw::ActionRow {
                             set_title: "Desktop",
                             set_subtitle: "Location not found",
-                            // set_activatable: true,
-                            // set_hexpand: true,
+                            set_activatable: true,
 
                             add_suffix = &gtk::Box {
-                                set_orientation: gtk::Orientation::Vertical,
+                                set_orientation: gtk::Orientation::Horizontal,
                                 set_hexpand: true,
+                                set_halign: gtk::Align::End,
 
                                 gtk::Button {
                                     set_icon_name: "document-open",
                                     add_css_class: "flat",
-                                }
-                            },
-
-                            add_suffix = &gtk::Box {
-                                set_orientation: gtk::Orientation::Vertical,
-                                set_hexpand: true,
+                                    set_valign: gtk::Align::Center,
+                                },
 
                                 gtk::Button {
                                     set_icon_name: "edit-delete",
                                     add_css_class: "flat",
+                                    set_valign: gtk::Align::Center,
                                 }
                             }
-
                         },
 
                         adw::ActionRow {
