@@ -63,9 +63,7 @@ impl SimpleComponent for SearchLocationsPage {
 
                         adw::ActionRow {
                             set_title: "Home",
-                            // set_hexpand: true,
                             set_subtitle: "Subfolders must be manually added for this location",
-                            // set_activatable: true,
 
                             add_suffix = &gtk::Switch {
                                 set_active: true,
@@ -76,7 +74,6 @@ impl SimpleComponent for SearchLocationsPage {
 
                     adw::PreferencesGroup {
                         set_title: "Custom Locations",
-                        // set_halign: gtk::Align::Center,
 
                         adw::ActionRow {
                             set_title: "Desktop",
@@ -105,9 +102,10 @@ impl SimpleComponent for SearchLocationsPage {
                         adw::ActionRow {
                             set_title: "Add Location",
                             set_activatable: true,
-                            set_halign: gtk::Align::Center,
+                            set_can_focus: true,
 
                             add_css_class: "bold",
+                            add_css_class: "center",
 
                             add_prefix = &gtk::Image {
                                 set_icon_name: Some("list-add-symbolic"),
