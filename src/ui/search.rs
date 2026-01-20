@@ -100,17 +100,28 @@ impl SimpleComponent for SearchLocationsPage {
                         },
 
                         adw::ActionRow {
-                            set_title: "Add Location",
                             set_activatable: true,
-                            set_can_focus: true,
 
-                            add_css_class: "bold",
-                            add_css_class: "center",
+                            #[wrap(Some)]
+                            set_child =
+                                &gtk::Box {
+                                    set_halign: gtk::Align::Center,
+                                    set_spacing: 12,
+                                    set_margin_all: 12,
 
-                            add_prefix = &gtk::Image {
-                                set_icon_name: Some("list-add-symbolic"),
-                                set_valign: gtk::Align::Center,
-                            }
+                                    gtk::Image {
+                                        set_icon_name: Some("list-add-symbolic"),
+                                        set_valign: gtk::Align::Center,
+                                    },
+
+
+                                    gtk::Label {
+                                        set_halign: gtk::Align::Center,
+                                        set_label: "Add Location"
+                                    },
+
+                                    add_css_class: "bold"
+                                },
                         },
                     }
                 }
