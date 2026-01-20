@@ -23,7 +23,7 @@ in
       deadnix
       alejandra
 
-      # Rust
+      # Rust
       rustc
       cargo
       rustfmt

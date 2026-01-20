@@ -11,7 +11,7 @@ use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
     about::AboutDialog, apps::AppModal, bluetooth::BluetoothModel, display::DisplayModel,
     network::NetworkModel, notifications::NotificationsModel, power::PowerModel,
-    search::SearchModal, wifi::WifiModel,
+    search::SearchModal, wifi::WifiModel, multitasking::MultitaskingModel,
 };
 use std::convert::identity;
 
@@ -25,6 +25,7 @@ pub(super) struct App {
     _search: Controller<SearchModal>,
     _apps: Controller<AppModal>,
     _power: Controller<PowerModel>,
+    _multitasking: Controller<MultitaskingModel>,
 }
 
 #[derive(Debug)]
@@ -135,6 +136,7 @@ impl SimpleComponent for App {
             add_titled: (search.widget(), Some("search"), "Search"),
             add_titled: (apps.widget(), Some("apps"), "Apps"),
             add_titled: (power.widget(), Some("power"), "Power"),
+            add_titled: (multitasking.widget(), Some("multitasking"), "Multitasking"),
             set_vhomogeneous: false,
         }
     }
@@ -174,6 +176,9 @@ impl SimpleComponent for App {
         let power = PowerModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let multitasking = MultitaskingModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
 
         let widgets = view_output!();
 
@@ -187,6 +192,7 @@ impl SimpleComponent for App {
             _search: search,
             _apps: apps,
             _power: power,
+            _multitasking: multitasking,
         };
 
         widgets.stack.connect_visible_child_notify({

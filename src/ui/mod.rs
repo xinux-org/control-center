@@ -8,3 +8,4 @@ pub mod power;
 pub mod search;
 pub mod sound;
 pub mod wifi;
+pub mod multitasking;
