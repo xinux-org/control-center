@@ -1,6 +1,7 @@
 pub mod about;
 pub mod bluetooth;
 pub mod display;
+pub mod multitasking;
 pub mod network;
 pub mod notifications;
 pub mod power;
