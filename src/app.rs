@@ -9,7 +9,7 @@ use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
-    about::AboutDialog, bluetooth::BluetoothModel, display::DisplayModel,
+    about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel, display::DisplayModel,
     multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel,
     power::PowerModel, wifi::WifiModel,
 };
@@ -30,6 +30,7 @@ pub(super) struct App {
     _apps: Controller<AppModal>,
     _power: Controller<PowerModel>,
     _multitasking: Controller<MultitaskingModel>,
+    _accounts: Controller<AccountsModel>,
 }
 
 #[derive(Debug)]
@@ -141,6 +142,7 @@ impl SimpleComponent for App {
             add_titled: (apps.widget(), Some("apps"), "Apps"),
             add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
             add_titled: (search.widget(), Some("search"), "Search"),
+            add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
             set_vhomogeneous: false,
         }
     }
@@ -183,6 +185,9 @@ impl SimpleComponent for App {
         let multitasking = MultitaskingModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let accounts = AccountsModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
 
         let widgets = view_output!();
 
@@ -197,6 +202,7 @@ impl SimpleComponent for App {
             _apps: apps,
             _power: power,
             _multitasking: multitasking,
+            _accounts: accounts,
         };
 
         widgets.stack.connect_visible_child_notify({
