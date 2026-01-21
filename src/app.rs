@@ -132,11 +132,11 @@ impl SimpleComponent for App {
             add_titled: (bluetooth.widget(), Some("bluetooth"), "Bluetooth"),
             add_titled: (display.widget(), Some("display"), "Display"),
             add_titled: (sound.widget(), Some("sound"), "Sound"),
-            add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
-            add_titled: (search.widget(), Some("search"), "Search"),
-            add_titled: (apps.widget(), Some("apps"), "Apps"),
             add_titled: (power.widget(), Some("power"), "Power"),
             add_titled: (multitasking.widget(), Some("multitasking"), "Multitasking"),
+            add_titled: (apps.widget(), Some("apps"), "Apps"),
+            add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
+            add_titled: (search.widget(), Some("search"), "Search"),
             set_vhomogeneous: false,
         }
     }
