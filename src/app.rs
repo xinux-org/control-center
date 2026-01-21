@@ -1,5 +1,5 @@
-use crate::ui::sound::SoundModel;
 use crate::RelmActionGroup;
+use crate::ui::sound::SoundModel;
 use relm4::*;
 
 use relm4::actions::RelmAction;
@@ -9,9 +9,9 @@ use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
-    about::AboutDialog, apps::AppModal, bluetooth::BluetoothModel, display::DisplayModel,
-    network::NetworkModel, notifications::NotificationsModel, power::PowerModel,
-    search::SearchModal, wifi::WifiModel, multitasking::MultitaskingModel,
+    about::AboutDialog, accounts::AccountsModel, apps::AppModal, bluetooth::BluetoothModel,
+    display::DisplayModel, multitasking::MultitaskingModel, network::NetworkModel,
+    notifications::NotificationsModel, power::PowerModel, search::SearchModal, wifi::WifiModel,
 };
 use std::convert::identity;
 
@@ -26,6 +26,7 @@ pub(super) struct App {
     _apps: Controller<AppModal>,
     _power: Controller<PowerModel>,
     _multitasking: Controller<MultitaskingModel>,
+    _accounts: Controller<AccountsModel>,
 }
 
 #[derive(Debug)]
@@ -137,6 +138,7 @@ impl SimpleComponent for App {
             add_titled: (apps.widget(), Some("apps"), "Apps"),
             add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
             add_titled: (search.widget(), Some("search"), "Search"),
+            add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
             set_vhomogeneous: false,
         }
     }
@@ -179,6 +181,9 @@ impl SimpleComponent for App {
         let multitasking = MultitaskingModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let accounts = AccountsModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
 
         let widgets = view_output!();
 
@@ -193,6 +198,7 @@ impl SimpleComponent for App {
             _apps: apps,
             _power: power,
             _multitasking: multitasking,
+            _accounts: accounts,
         };
 
         widgets.stack.connect_visible_child_notify({

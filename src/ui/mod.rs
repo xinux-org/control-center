@@ -9,3 +9,4 @@ pub mod search;
 pub mod sound;
 pub mod wifi;
 pub mod multitasking;
+pub mod accounts;
