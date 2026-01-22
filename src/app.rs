@@ -86,6 +86,8 @@ impl SimpleComponent for App {
 
             #[name(split_view)]
             adw::NavigationSplitView {
+                // set_min_sidebar_width: 180.0,
+
                 #[wrap(Some)]
                 set_sidebar = &adw::NavigationPage {
                     set_title: "Settings",
@@ -126,7 +128,10 @@ impl SimpleComponent for App {
                             adw::LengthUnit::Sp,
                         )
                     ),
-                    &[(&split_view, "collapsed", true)]
+                    &[
+                    (&split_view, "collapsed", true),
+                    // (&model.welcome_page.widget(), "reveal", Some(&true.into()))
+                    ]
                 ),
         },
         stack = &gtk::Stack {
@@ -143,6 +148,7 @@ impl SimpleComponent for App {
             add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
             add_titled: (sharing.widget(), Some("sharing"), "Sharing"),
             set_vhomogeneous: false,
+            set_hhomogeneous: false,
         }
     }
 
