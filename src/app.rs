@@ -9,10 +9,9 @@ use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
-    about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel,
-    display::DisplayModel, multitasking::MultitaskingModel, network::NetworkModel,
-    notifications::NotificationsModel, power::PowerModel,
-    sharing::SharingModel, wifi::WifiModel,
+    about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel, display::DisplayModel,
+    multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel,
+    power::PowerModel, sharing::SharingModel, wifi::WifiModel,
 };
 
 use crate::ui::apps::AppModal;
