@@ -11,7 +11,7 @@ use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
     about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel, display::DisplayModel,
     multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel,
-    power::PowerModel, wifi::WifiModel,
+    power::PowerModel, sharing::SharingModel, wifi::WifiModel,
 };
 
 use crate::ui::apps::AppModal;
@@ -31,6 +31,7 @@ pub(super) struct App {
     _power: Controller<PowerModel>,
     _multitasking: Controller<MultitaskingModel>,
     _accounts: Controller<AccountsModel>,
+    _sharing: Controller<SharingModel>,
 }
 
 #[derive(Debug)]
@@ -143,6 +144,7 @@ impl SimpleComponent for App {
             add_titled: (notifications.widget(), Some("notifications"), "Notifications"),
             add_titled: (search.widget(), Some("search"), "Search"),
             add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
+            add_titled: (sharing.widget(), Some("sharing"), "Sharing"),
             set_vhomogeneous: false,
         }
     }
@@ -188,6 +190,9 @@ impl SimpleComponent for App {
         let accounts = AccountsModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let sharing = SharingModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
 
         let widgets = view_output!();
 
@@ -203,6 +208,7 @@ impl SimpleComponent for App {
             _power: power,
             _multitasking: multitasking,
             _accounts: accounts,
+            _sharing: sharing,
         };
 
         widgets.stack.connect_visible_child_notify({

@@ -6,6 +6,7 @@ pub mod multitasking;
 pub mod network;
 pub mod notifications;
 pub mod power;
+pub mod sharing;
 pub mod sound;
 pub mod wifi;
 
