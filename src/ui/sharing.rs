@@ -26,14 +26,8 @@ impl SimpleComponent for SharingModel {
             adw::PreferencesPage {
 
                 adw::PreferencesGroup {
-                    adw::ActionRow {
+                    adw::EntryRow {
                         set_title: "Device Name",
-                        set_subtitle: "bemeritus",
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("document-edit-symbolic"),
-                            set_pixel_size: 16,
-                        }
                     },
 
                 },

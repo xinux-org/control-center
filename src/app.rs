@@ -12,7 +12,7 @@ use crate::ui::{
     about::AboutDialog, accounts::AccountsModel, apps::AppModal, bluetooth::BluetoothModel,
     display::DisplayModel, multitasking::MultitaskingModel, network::NetworkModel,
     notifications::NotificationsModel, power::PowerModel, search::SearchModal,
-    sharing::SharingModel, wifi::WifiModel,
+    sharing::SharingModel, wellbeing::WellbeingModel, wifi::WifiModel,
 };
 use std::convert::identity;
 
@@ -29,6 +29,7 @@ pub(super) struct App {
     _multitasking: Controller<MultitaskingModel>,
     _accounts: Controller<AccountsModel>,
     _sharing: Controller<SharingModel>,
+    _wellbeing: Controller<WellbeingModel>,
 }
 
 #[derive(Debug)]
@@ -142,6 +143,7 @@ impl SimpleComponent for App {
             add_titled: (search.widget(), Some("search"), "Search"),
             add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
             add_titled: (sharing.widget(), Some("sharing"), "Sharing"),
+            add_titled: (wellbeing.widget(), Some("wellbeing"), "Wellbeing"),
             set_vhomogeneous: false,
         }
     }
@@ -154,15 +156,12 @@ impl SimpleComponent for App {
         let wifi = WifiModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-
         let network = NetworkModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-
         let bluetooth = BluetoothModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-
         let display = DisplayModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
@@ -190,6 +189,9 @@ impl SimpleComponent for App {
         let sharing = SharingModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let wellbeing = WellbeingModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
 
         let widgets = view_output!();
 
@@ -206,6 +208,7 @@ impl SimpleComponent for App {
             _multitasking: multitasking,
             _accounts: accounts,
             _sharing: sharing,
+            _wellbeing: wellbeing,
         };
 
         widgets.stack.connect_visible_child_notify({
