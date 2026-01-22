@@ -1,5 +1,5 @@
-use crate::ui::sound::SoundModel;
 use crate::RelmActionGroup;
+use crate::ui::sound::SoundModel;
 use relm4::*;
 
 use relm4::actions::RelmAction;
@@ -9,10 +9,13 @@ use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
-    about::AboutDialog, apps::AppModal, bluetooth::BluetoothModel, display::DisplayModel,
-    network::NetworkModel, notifications::NotificationsModel, power::PowerModel,
-    search::SearchModal, wifi::WifiModel,
+    about::AboutDialog, bluetooth::BluetoothModel, display::DisplayModel, network::NetworkModel,
+    notifications::NotificationsModel, power::PowerModel, wifi::WifiModel,
 };
+
+use crate::ui::apps::AppModal;
+use crate::ui::search::SearchModal;
+
 use std::convert::identity;
 
 pub(super) struct App {
