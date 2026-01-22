@@ -1,18 +1,34 @@
 use crate::app::AppMsg;
+use relm4::adw;
 use relm4::adw::prelude::*;
 use relm4::gtk;
 use relm4::prelude::*;
 
-#[derive(Debug, Clone, Copy)]
-pub struct AppModal {}
+use crate::ui::apps::default_apps::DefaultAppsPage;
+
+// First page modal
+#[derive(Debug)]
+pub struct AppModal {
+    navigation: adw::NavigationView,
+    default_apps: Controller<DefaultAppsPage>,
+}
+
+// First page message
+#[derive(Debug)]
+pub enum AppsMsg {
+    OpenDefaultApps,
+}
 
 #[relm4::component(pub)]
 impl SimpleComponent for AppModal {
     type Init = ();
-    type Input = ();
+    type Input = AppsMsg;
     type Output = AppMsg;
 
     view! {
+        #[name = "navigation"]
+        adw::NavigationView{
+            add = &adw::NavigationPage{
         adw::ToolbarView {
             set_top_bar_style: adw::ToolbarStyle::Flat,
 
@@ -27,7 +43,7 @@ impl SimpleComponent for AppModal {
                     set_width_request: 300,
 
                     gtk::SearchEntry {
-                        set_placeholder_text: Some("Search"),
+                        set_placeholder_text: Some("Search apps"),
                     },
                 },
 
@@ -35,8 +51,9 @@ impl SimpleComponent for AppModal {
                     adw::ActionRow {
                         set_title: "Default Apps",
                         set_activatable: true,
-                        set_subtitle: "Decide which apps open links, files, and media",
+                        set_subtitle: "Set which apps open links, files, and media",
 
+                        connect_activated => AppsMsg::OpenDefaultApps,
 
                         add_suffix = &gtk::Button {
                             set_icon_name: "go-next",
@@ -48,7 +65,8 @@ impl SimpleComponent for AppModal {
                     },
                 },
             }
-        }
+        }}}
+
     }
 
     fn init(
@@ -56,8 +74,23 @@ impl SimpleComponent for AppModal {
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let model = Self {};
         let widgets = view_output!();
+
+        let default_apps = DefaultAppsPage::builder().launch(()).detach();
+
+        let model = Self {
+            navigation: widgets.navigation.clone(),
+            default_apps,
+        };
         ComponentParts { model, widgets }
+    }
+
+    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+        match msg {
+            AppsMsg::OpenDefaultApps => {
+                let page = self.default_apps.widget();
+                self.navigation.push(page);
+            }
+        }
     }
 }

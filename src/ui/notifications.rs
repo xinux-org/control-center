@@ -53,7 +53,7 @@ impl SimpleComponent for NotificationsModel {
                         set_activatable: true,
 
                         add_prefix = &gtk::Image {
-                            set_icon_name: Some("network-wireless-symbolic"),
+                            set_icon_name: Some("cluster"),
                             set_pixel_size: 16,
                         },
 
