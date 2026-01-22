@@ -37,7 +37,35 @@ impl SimpleComponent for WifiModel {
                 },
 
                 adw::PreferencesGroup {
-                    
+                    adw::ActionRow {
+                        set_title: "Saved Networks",
+                        set_activatable: true,
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Connect to Hidden Network...",
+                        set_activatable: true,
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Turn On Wi-Fi Hotspot...",
+                        set_activatable: true,
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    }
                 },
 
                 adw::PreferencesGroup {
