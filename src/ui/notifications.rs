@@ -49,7 +49,7 @@ impl SimpleComponent for NotificationsModel {
                     set_title: "App Notifications",
 
                     adw::ActionRow {
-                        set_title: "App Name",
+                        set_title: "Apps",
                         set_activatable: true,
 
                         add_prefix = &gtk::Image {
@@ -62,16 +62,17 @@ impl SimpleComponent for NotificationsModel {
                             set_spacing: 6,
 
                             gtk::Label {
-                                set_label: "On"
-                            },
-
-                            gtk::Button {
-                                set_icon_name: "go-next",
+                                set_label: "on",
                                 add_css_class: "flat",
                                 set_valign: gtk::Align::Center,
                             },
+
+                            gtk::Image {
+                                set_icon_name: Some("go-next-symbolic"),
+                                set_pixel_size: 16,
+                            }
                         }
-                    },
+                    }
                 }
             }
         }
