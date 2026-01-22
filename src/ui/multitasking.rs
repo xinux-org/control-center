@@ -76,27 +76,9 @@ impl SimpleComponent for MultitaskingModel {
                         }
                     },
 
-                    adw::ActionRow {
-                        set_title: "Number of Workspaces",
-
-                        add_suffix = &gtk::Label {
-                            set_label: "4",
-                            add_css_class: "flat",
-                            set_valign: gtk::Align::Center,
-                        },
-
-                        add_suffix = &gtk::Button {
-                            set_icon_name: "value-decrease-symbolic",
-                            add_css_class: "flat",
-                            set_valign: gtk::Align::Center,
-                        },
-
-                        add_suffix = &gtk::Button {
-                            set_icon_name: "value-increase-symbolic",
-                            add_css_class: "flat",
-                            set_valign: gtk::Align::Center,
-                        },
-                    }
+                    adw::SpinRow {
+                        set_title: "Number of Workspaces"
+                    },
                 },
 
                 adw::PreferencesGroup {
