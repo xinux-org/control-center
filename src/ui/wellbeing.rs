@@ -40,14 +40,8 @@ impl SimpleComponent for WellbeingModel {
                     set_margin_top: 10,
                     set_title: "Screen Limits",
 
-                    adw::ActionRow {
-                        set_title: "Screen Time Limit",
-                        set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
+                    adw::SwitchRow {
+                        set_title: "Screen Time Limit"
                     },
 
                     adw::ComboRow {
@@ -60,15 +54,39 @@ impl SimpleComponent for WellbeingModel {
                         set_selected: 0,
                     },
 
-                    adw::ActionRow {
+                    adw::SwitchRow {
                         set_title: "Gray Scala",
                         set_subtitle: "Black and white for screen limits",
-                        set_activatable: true,
+                    },
+                },
 
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
+                adw::PreferencesGroup {
+                    set_margin_top: 10,
+                    set_title: "Break Reminders",
+
+                    adw::SwitchRow {
+                        set_title: "Eyesight Reminders",
+                        set_subtitle: "Reminders to look away from the screen"
+                    },
+
+                    adw::SwitchRow {
+                        set_title: "Movement Reminders",
+                        set_subtitle: "Reminders to move around"
+                    },
+
+                    adw::ComboRow {
+                        set_title: "Daily Limit",
+                        #[wrap(Some)]
+                        set_model = &gtk::StringList::new(&[
+                            "5 minutes / 30 minutes",
+                            "60 minutes / 90 minutes",
+                        ]),
+                        set_selected: 0,
+                    },
+
+                    adw::SwitchRow {
+                        set_title: "Sounds",
+                        set_subtitle: "Play a sound when a break ends",
                     },
                 }
             }
