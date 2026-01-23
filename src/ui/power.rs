@@ -79,7 +79,7 @@ impl SimpleComponent for PowerModel {
         let view_stack = adw::ViewStack::new();
         let general_page = GeneralPowerPageView::builder().launch(()).detach();
         let saving_page = SavingPowerPageView::builder().launch(()).detach();
-        
+
         let model = Self {
             view_stack: view_stack.clone(),
             general_page,
@@ -87,7 +87,7 @@ impl SimpleComponent for PowerModel {
             show_view_stack_bar: false,
         };
         let widgets = view_output!();
-        
+
         let view_stack = model.view_stack.clone();
         let general_view_switcher = widgets.view_stack.page(model.general_page.widget());
         let saving_view_switcher = widgets.view_stack.page(model.saving_page.widget());
@@ -331,26 +331,16 @@ impl Component for SavingPowerPageView {
             set_orientation: gtk::Orientation::Vertical,
             set_spacing: 12,
             adw::PreferencesGroup {
-                adw::ActionRow {
+                adw::SwitchRow {
                     set_title: "Automic Power Saver",
                     set_subtitle: "Turn on power saver made when battery power is low",
-
-                    add_suffix = &gtk::Switch {
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
-                    }
                 }
             },
 
             adw::PreferencesGroup {
-                adw::ActionRow {
+                adw::SwitchRow {
                     set_title: "Automatic Screen Blank",
                     set_subtitle: "Turn the screen off after a period of inactivity",
-
-                    add_suffix = &gtk::Switch {
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
-                    }
                 },
 
                 adw::ComboRow {
@@ -372,13 +362,8 @@ impl Component for SavingPowerPageView {
             adw::PreferencesGroup {
                 set_title: "Automatic Suspend",
 
-                adw::ActionRow {
+                adw::SwitchRow {
                     set_title: "On Battery Power",
-
-                    add_suffix = &gtk::Switch{
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
-                    }
                 },
 
                 adw::ComboRow {
@@ -399,13 +384,8 @@ impl Component for SavingPowerPageView {
             },
 
             adw::PreferencesGroup {
-                adw::ActionRow {
+                adw::SwitchRow {
                     set_title: "When plugged",
-
-                    add_suffix = &gtk::Switch{
-                        set_active: true,
-                        set_valign: gtk::Align::Center,
-                    }
                 },
 
                 adw::ComboRow {

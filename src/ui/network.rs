@@ -34,20 +34,15 @@ impl SimpleComponent for NetworkModel {
               set_valign: gtk::Align::Center,
             },
 
-            adw::ActionRow {
+            adw::SwitchRow {
               set_title: "Cable unplugged",
-              set_activatable: true,
 
-              add_suffix = &gtk::Switch {
-                set_active: true,
-                set_valign: gtk::Align::Center,
-              },
               add_suffix = &gtk::Button {
                 set_icon_name: "emblem-system-symbolic",
                 add_css_class: "flat",
                 set_valign: gtk::Align::Center,
               }
-            }
+            },
           },
 
           adw::PreferencesGroup {

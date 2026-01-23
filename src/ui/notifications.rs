@@ -25,23 +25,11 @@ impl SimpleComponent for NotificationsModel {
 
             adw::PreferencesPage {
                 adw::PreferencesGroup {
-                    adw::ActionRow {
+                    adw::SwitchRow {
                         set_title: "Do Not Disturb",
-                        set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
                     },
-                    adw::ActionRow {
+                    adw::SwitchRow {
                         set_title: "Lock Screen Notifications",
-                        set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
                     }
                 },
 

@@ -64,14 +64,8 @@ impl SimpleComponent for DisplayModel {
                         set_selected: 0,
                     },
 
-                    adw::ActionRow {
-                        set_title: "HDR (High Dynamic Range)",
-                        set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
+                    adw::SwitchRow {
+                        set_title: "HDR (High Dynamic Range)"
                     },
 
                     adw::ActionRow {
