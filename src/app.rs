@@ -1,5 +1,4 @@
 use crate::RelmActionGroup;
-use crate::ui::sound::SoundModel;
 use relm4::*;
 
 use relm4::actions::RelmAction;
@@ -9,10 +8,9 @@ use gtk::{gio, glib};
 
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
-    about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel,
-    display::DisplayModel, multitasking::MultitaskingModel, network::NetworkModel,
-    notifications::NotificationsModel, power::PowerModel,
-    sharing::SharingModel, wellbeing::WellbeingModel, wifi::WifiModel,
+    about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel, display::DisplayModel,
+    multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel, sound::SoundModel,
+    power::PowerModel, sharing::SharingModel, wellbeing::WellbeingModel, wifi::WifiModel, system::SystemPageModel,
 };
 
 use crate::ui::apps::AppModal;
@@ -34,6 +32,7 @@ pub(super) struct App {
     _accounts: Controller<AccountsModel>,
     _sharing: Controller<SharingModel>,
     _wellbeing: Controller<WellbeingModel>,
+    _system: Controller<SystemPageModel>,
 }
 
 #[derive(Debug)]
@@ -153,6 +152,7 @@ impl SimpleComponent for App {
             add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
             add_titled: (sharing.widget(), Some("sharing"), "Sharing"),
             add_titled: (wellbeing.widget(), Some("wellbeing"), "Wellbeing"),
+            add_titled: (system.widget(), Some("system"), "System"),
             set_vhomogeneous: false,
             set_hhomogeneous: false,
         }
@@ -202,6 +202,9 @@ impl SimpleComponent for App {
         let wellbeing = WellbeingModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let system = SystemPageModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
 
         let widgets = view_output!();
 
@@ -219,6 +222,7 @@ impl SimpleComponent for App {
             _accounts: accounts,
             _sharing: sharing,
             _wellbeing: wellbeing,
+            _system: system
         };
 
         widgets.stack.connect_visible_child_notify({
