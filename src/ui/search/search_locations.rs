@@ -51,14 +51,9 @@ impl SimpleComponent for SearchLocationsPage {
                         set_title: "Default Locations",
                         set_margin_top: 10,
 
-                        adw::ActionRow {
+                        adw::SwitchRow {
                             set_title: "Home",
                             set_subtitle: "Subfolders must be manually added for this location",
-
-                            add_suffix = &gtk::Switch {
-                                set_active: true,
-                                set_valign: gtk::Align::Center,
-                            },
                         },
                     },
 

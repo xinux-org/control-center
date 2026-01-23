@@ -27,27 +27,15 @@ impl SimpleComponent for MultitaskingModel {
                 adw::PreferencesGroup {
                     set_title: "General",
 
-                    adw::ActionRow {
+                    adw::SwitchRow {
                         set_title: "Hot Corner",
                         set_subtitle: "Touch the top-left corner to open the Activities Overview",
-                        set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
                     },
 
-                    adw::ActionRow {
+                    adw::SwitchRow {
                         set_title: "Active Screen Edges",
                         set_subtitle: "Drag windows against the top, left, and right screen edges to resize them",
-                        set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
-                    }
+                    },
                 },
 
 
@@ -62,7 +50,7 @@ impl SimpleComponent for MultitaskingModel {
 
                         add_prefix = &gtk::CheckButton {
                             set_active: false,
-                            
+
                         }
                     },
 

@@ -43,15 +43,9 @@ impl SimpleComponent for SearchModal {
 
                     adw::PreferencesPage {
                         adw::PreferencesGroup {
-                            adw::ActionRow {
+                            adw::SwitchRow {
                                 set_title: "App Search",
                                 set_subtitle: "Include app-provided search results",
-                                set_activatable: false,
-
-                                add_suffix = &gtk::Switch {
-                                    set_active: true,
-                                    set_valign: gtk::Align::Center,
-                                }
                             },
 
                             adw::ActionRow {

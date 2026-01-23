@@ -101,15 +101,9 @@ impl SimpleComponent for DefaultAppsPage {
                     adw::PreferencesGroup {
                         set_title: "Removable Media",
 
-                        adw::ActionRow {
+                        adw::SwitchRow {
                             set_title: "Media Autostart",
                             set_subtitle: "Start apps or prompt when media is connected",
-                            set_activatable: true,
-
-                            add_suffix = &gtk::Switch {
-                                set_active: true,
-                                set_valign: gtk::Align::Center,
-                            }
                         },
                     }
                 },

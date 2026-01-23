@@ -25,14 +25,9 @@ impl SimpleComponent for WifiModel {
 
             adw::PreferencesPage {
                 adw::PreferencesGroup {
-                    adw::ActionRow {
+                    adw::SwitchRow {
                         set_title: "Wi-Fi",
                         set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: true,
-                            set_valign: gtk::Align::Center,
-                        }
                     }
                 },
 
@@ -69,15 +64,9 @@ impl SimpleComponent for WifiModel {
                 },
 
                 adw::PreferencesGroup {
-                    adw::ActionRow {
+                    adw::SwitchRow {
                         set_title: "Airplane Mode",
                         set_subtitle: "Disables Wi-Fi, Bluetooth and mobile broadband",
-                        set_activatable: true,
-
-                        add_suffix = &gtk::Switch {
-                            set_active: false,
-                            set_valign: gtk::Align::Center,
-                        }
                     }
                 },
 
