@@ -27,7 +27,7 @@ nix develop
 meson setup build
 
 # build the project
-nix build . --show--trace
+nix build . --show-trace
 
 ./result/bin/control-center
 
