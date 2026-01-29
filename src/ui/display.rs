@@ -77,7 +77,7 @@ impl SimpleComponent for DisplayModel {
 
                             gtk::ToggleButton {
                                 set_label: "100 %",
-                                set_active: true,
+                                // set_active: true,
                                 // add_css_class: "flat",
                             },
 

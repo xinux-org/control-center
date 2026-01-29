@@ -9,8 +9,9 @@ use gtk::{gio, glib};
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
     about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel, display::DisplayModel,
-    multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel, sound::SoundModel,
-    power::PowerModel, sharing::SharingModel, wellbeing::WellbeingModel, wifi::WifiModel, system::SystemPageModel,
+    multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel,
+    power::PowerModel, sharing::SharingModel, sound::SoundModel, system::SystemPageModel,
+    wellbeing::WellbeingModel, wifi::WifiModel, privacyandsecurity::PrivacyAndSecurityModel,
 };
 
 use crate::ui::apps::AppModal;
@@ -32,6 +33,7 @@ pub(super) struct App {
     _accounts: Controller<AccountsModel>,
     _sharing: Controller<SharingModel>,
     _wellbeing: Controller<WellbeingModel>,
+    _privacyandsecurity: Controller<PrivacyAndSecurityModel>,
     _system: Controller<SystemPageModel>,
 }
 
@@ -152,6 +154,7 @@ impl SimpleComponent for App {
             add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
             add_titled: (sharing.widget(), Some("sharing"), "Sharing"),
             add_titled: (wellbeing.widget(), Some("wellbeing"), "Wellbeing"),
+            add_titled: (privacyandsecurity.widget(), Some("privacyandsecurity"), "Privacy and Security"),
             add_titled: (system.widget(), Some("system"), "System"),
             set_vhomogeneous: false,
             set_hhomogeneous: false,
@@ -202,6 +205,9 @@ impl SimpleComponent for App {
         let wellbeing = WellbeingModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
+        let privacyandsecurity = PrivacyAndSecurityModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
         let system = SystemPageModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
@@ -222,7 +228,8 @@ impl SimpleComponent for App {
             _accounts: accounts,
             _sharing: sharing,
             _wellbeing: wellbeing,
-            _system: system
+            _system: system,
+            _privacyandsecurity: privacyandsecurity,
         };
 
         widgets.stack.connect_visible_child_notify({
