@@ -9,8 +9,9 @@ use gtk::{gio, glib};
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
     about::AboutDialog, accounts::AccountsModel, bluetooth::BluetoothModel, display::DisplayModel,
-    multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel, sound::SoundModel,
-    power::PowerModel, sharing::SharingModel, wellbeing::WellbeingModel, wifi::WifiModel, system::SystemPageModel,
+    multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel,
+    power::PowerModel, sharing::SharingModel, sound::SoundModel, system::SystemPageModel,
+    wellbeing::WellbeingModel, wifi::WifiModel,
 };
 
 use crate::ui::apps::AppModal;
@@ -222,7 +223,7 @@ impl SimpleComponent for App {
             _accounts: accounts,
             _sharing: sharing,
             _wellbeing: wellbeing,
-            _system: system
+            _system: system,
         };
 
         widgets.stack.connect_visible_child_notify({

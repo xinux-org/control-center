@@ -4,12 +4,13 @@ mod app;
 mod ui;
 
 use config::{APP_ID, GETTEXT_PACKAGE, LOCALEDIR, RESOURCES_FILE};
-use gettextrs::{gettext, LocaleCategory};
+use gettextrs::{LocaleCategory, gettext};
 use gtk::prelude::ApplicationExt;
 use gtk::{gio, glib};
 use relm4::{
+    RelmApp,
     actions::{AccelsPlus, RelmAction, RelmActionGroup},
-    gtk, main_application, RelmApp,
+    gtk, main_application,
 };
 
 use app::App;

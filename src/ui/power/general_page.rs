@@ -1,0 +1,208 @@
+use relm4::adw::prelude::*;
+use relm4::gtk;
+use relm4::prelude::*;
+
+use crate::ui::power::power_page::PowerMsg;
+
+#[derive(Debug)]
+pub struct GeneralPowerPageView {
+    pub power_mode: PowerMode,
+    pub show_battery_percentage: bool,
+}
+
+#[derive(Debug)]
+pub enum GeneralPowerPageViewMsg {
+    SetPowerMode(PowerMode),
+    ToggleBatteryPercentage(bool),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum PowerMode {
+    Performance,
+    Balanced,
+    PowerSaver,
+}
+
+#[relm4::component(pub)]
+impl Component for GeneralPowerPageView {
+    type Init = ();
+    type Input = GeneralPowerPageViewMsg;
+    type Output = PowerMsg;
+    type CommandOutput = ();
+
+    view! {
+        gtk::Box {
+            set_orientation: gtk::Orientation::Vertical,
+            set_spacing: 24,
+
+
+            gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
+                set_spacing: 12,
+
+                gtk::Label {
+                    set_label: "Battery Level",
+                    set_halign: gtk::Align::Start,
+                    add_css_class: "heading",
+                },
+
+                adw::PreferencesGroup {
+                    gtk::Box {
+                        set_orientation: gtk::Orientation::Vertical,
+                        set_spacing: 8,
+                        set_margin_all: 16,
+
+                        gtk::ProgressBar {
+                            set_fraction: 1.0,
+                            set_show_text: false,
+                            set_hexpand: true,
+                            add_css_class: "battery-bar",
+                        },
+
+                        gtk::Box {
+                            set_orientation: gtk::Orientation::Horizontal,
+                            set_spacing: 8,
+
+                            gtk::Label {
+                                set_label: "Fully charged",
+                                set_halign: gtk::Align::Start,
+                                set_hexpand: true,
+                            },
+
+                            gtk::Label {
+                                set_label: "100 %",
+                                set_halign: gtk::Align::End,
+                            },
+                        },
+                    },
+                },
+            },
+
+
+            gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
+                set_spacing: 12,
+
+                gtk::Label {
+                    set_label: "Power Mode",
+                    set_halign: gtk::Align::Start,
+                    add_css_class: "heading",
+                },
+
+                adw::PreferencesGroup {
+
+                    adw::ActionRow {
+                        set_title: "Performance",
+                        set_subtitle: "High performance and power usage",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::CheckButton {
+                            #[watch]
+                            set_active: model.power_mode == PowerMode::Performance,
+                            connect_toggled[sender] => move |btn| {
+                                if btn.is_active() {
+                                    sender.input(GeneralPowerPageViewMsg::SetPowerMode(PowerMode::Performance));
+                                }
+                            },
+                        },
+                    },
+
+
+                    adw::ActionRow {
+                        set_title: "Balanced",
+                        set_subtitle: "Standard performance and power usage",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::CheckButton {
+                            #[watch]
+                            set_active: model.power_mode == PowerMode::Balanced,
+                            connect_toggled[sender] => move |btn| {
+                                if btn.is_active() {
+                                    sender.input(GeneralPowerPageViewMsg::SetPowerMode(PowerMode::Balanced));
+                                }
+                            },
+                        },
+                    },
+
+
+                    adw::ActionRow {
+                        set_title: "Power Saver",
+                        set_subtitle: "Reduced performance and power usage",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::CheckButton {
+                            #[watch]
+                            set_active: model.power_mode == PowerMode::PowerSaver,
+                            connect_toggled[sender] => move |btn| {
+                                if btn.is_active() {
+                                    sender.input(GeneralPowerPageViewMsg::SetPowerMode(PowerMode::PowerSaver));
+                                }
+                            },
+                        },
+                    },
+                },
+            },
+
+
+            gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
+                set_spacing: 12,
+
+                gtk::Label {
+                    set_label: "General",
+                    set_halign: gtk::Align::Start,
+                    add_css_class: "heading",
+                },
+
+                adw::PreferencesGroup {
+                    adw::ComboRow {
+                        set_title: "Power Button Behavior",
+                        set_model: Some(&gtk::StringList::new(&["Suspend", "Shutdown", "Do Nothing"])),
+                        set_selected: 0,
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Show Battery Percentage",
+                        set_subtitle: "Show exact charge level in the top bar",
+
+                        add_suffix = &gtk::Switch {
+                            set_valign: gtk::Align::Center,
+                            #[watch]
+                            set_active: model.show_battery_percentage,
+                            connect_state_set[sender] => move |_, state| {
+                                sender.input(GeneralPowerPageViewMsg::ToggleBatteryPercentage(state));
+                                gtk::glib::Propagation::Proceed
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    }
+
+    fn init(
+        init: Self::Init,
+        root: Self::Root,
+        sender: ComponentSender<Self>,
+    ) -> ComponentParts<Self> {
+        let model = Self {
+            power_mode: PowerMode::PowerSaver,
+            show_battery_percentage: false,
+        };
+
+        let widgets = view_output!();
+
+        ComponentParts { model, widgets }
+    }
+
+    fn update(&mut self, message: Self::Input, _sender: ComponentSender<Self>, _root: &Self::Root) {
+        match message {
+            GeneralPowerPageViewMsg::SetPowerMode(mode) => {
+                self.power_mode = mode;
+            }
+            GeneralPowerPageViewMsg::ToggleBatteryPercentage(state) => {
+                self.show_battery_percentage = state;
+            }
+        }
+    }
+}
