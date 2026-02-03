@@ -60,13 +60,13 @@ impl SimpleComponent for PowerModel {
                         },
                         // A bottom bar when on mobile. See more:
                         // https://github.com/blissd/fotema/blob/74160645a25d2cfe4ceb4f1935c247158ec3ab5f/src/app.rs#L401C52-L401C64
-                        #[name(switcher_bar)]
-                        adw::ViewSwitcherBar {
-                            set_stack: Some(&view_stack),
-                            #[track(model.show_view_stack_bar)]
-                            // set_reveal: model.show_view_stack_bar,
-                            set_reveal: true,
-                            }
+                        // #[name(switcher_bar)]
+                        // adw::ViewSwitcherBar {
+                        //     set_stack: Some(&view_stack),
+                        //     #[track(model.show_view_stack_bar)]
+                        //     // set_reveal: model.show_view_stack_bar,
+                        //     set_reveal: true,
+                        //     }
                         },
                     },
                 },
@@ -89,6 +89,7 @@ impl SimpleComponent for PowerModel {
             saving_page,
             show_view_stack_bar: false,
         };
+
         let widgets = view_output!();
 
         let view_stack = model.view_stack.clone();

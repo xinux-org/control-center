@@ -2,25 +2,58 @@ use relm4::adw::prelude::*;
 use relm4::gtk;
 use relm4::prelude::*;
 
+use ppd::PpdProxyBlocking;
+use zbus::blocking::Connection;
+
+use std::fmt;
+use std::fs;
+use std::sync::Arc;
+use std::thread;
+
+use notify::{Event, RecursiveMode, Result, Watcher};
+use std::{path::Path, sync::mpsc};
+
 use crate::ui::power::power_page::PowerMsg;
 
+use glib::ControlFlow;
+use glib::source::timeout_add_seconds;
+
 #[derive(Debug)]
+#[tracker::track]
 pub struct GeneralPowerPageView {
     pub power_mode: PowerMode,
     pub show_battery_percentage: bool,
+
+    pub battery_percentage: String,
+    pub battery_status: String,
+    pub battery_percentage_float: f64,
+    #[tracker::do_not_track]
+    pub ppd: Arc<PpdProxyBlocking<'static>>,
+}
+
+impl fmt::Display for PowerMode {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            PowerMode::Performance => "performance",
+            PowerMode::Balanced => "balanced",
+            PowerMode::PowerSaver => "power-saver",
+        };
+        write!(f, "{s}")
+    }
 }
 
 #[derive(Debug)]
 pub enum GeneralPowerPageViewMsg {
     SetPowerMode(PowerMode),
     ToggleBatteryPercentage(bool),
+    ChangeBattery,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum PowerMode {
-    Performance,
-    Balanced,
-    PowerSaver,
+    Performance, // performance
+    Balanced,    // balanced
+    PowerSaver,  // power-saver
 }
 
 #[relm4::component(pub)]
@@ -35,7 +68,6 @@ impl Component for GeneralPowerPageView {
             set_orientation: gtk::Orientation::Vertical,
             set_spacing: 24,
 
-
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,
                 set_spacing: 12,
@@ -49,12 +81,23 @@ impl Component for GeneralPowerPageView {
                 adw::PreferencesGroup {
                     gtk::Box {
                         set_orientation: gtk::Orientation::Vertical,
+                        set_valign: gtk::Align::Center,
                         set_spacing: 8,
                         set_margin_all: 16,
 
-                        gtk::ProgressBar {
-                            set_fraction: 1.0,
-                            set_show_text: false,
+                        add_css_class: "action-row",
+
+                        gtk::LevelBar {
+                            set_min_value: 1.0,
+                            set_max_value: 100.0,
+
+                            add_offset_value: ("low", 20.0),
+                            add_offset_value: ("high", 60.0),
+                            add_offset_value: ("full", 100.0),
+
+                            #[watch]
+                            set_value: model.battery_percentage_float,
+
                             set_hexpand: true,
                             add_css_class: "battery-bar",
                         },
@@ -64,16 +107,26 @@ impl Component for GeneralPowerPageView {
                             set_spacing: 8,
 
                             gtk::Label {
-                                set_label: "Fully charged",
+                                #[watch]
+                                set_label: model.battery_status.as_str(),
                                 set_halign: gtk::Align::Start,
                                 set_hexpand: true,
                             },
 
                             gtk::Label {
-                                set_label: "100 %",
+                                #[watch]
+                                // #[track(model.changed(GeneralPowerPageView::battery_percentage()))]
+                                set_label: model.battery_percentage.as_str(),
                                 set_halign: gtk::Align::End,
                             },
                         },
+
+                        adw::ButtonRow {
+                            set_title: "Update battery",
+                            set_activatable: true,
+
+                            connect_activate => GeneralPowerPageViewMsg::ChangeBattery
+                        }
                     },
                 },
             },
@@ -90,13 +143,17 @@ impl Component for GeneralPowerPageView {
                 },
 
                 adw::PreferencesGroup {
-
                     adw::ActionRow {
                         set_title: "Performance",
                         set_subtitle: "High performance and power usage",
                         set_activatable: true,
 
+                        set_activatable_widget: Some(&activatable_performance),
+
+                        #[name = "activatable_performance"]
                         add_prefix = &gtk::CheckButton {
+                            set_group: Some(&activatable_balanced),
+
                             #[watch]
                             set_active: model.power_mode == PowerMode::Performance,
                             connect_toggled[sender] => move |btn| {
@@ -107,13 +164,17 @@ impl Component for GeneralPowerPageView {
                         },
                     },
 
-
                     adw::ActionRow {
                         set_title: "Balanced",
                         set_subtitle: "Standard performance and power usage",
                         set_activatable: true,
 
+                        set_activatable_widget: Some(&activatable_balanced),
+
+                        #[name = "activatable_balanced"]
                         add_prefix = &gtk::CheckButton {
+                            set_group: Some(&activatable_powersaver),
+
                             #[watch]
                             set_active: model.power_mode == PowerMode::Balanced,
                             connect_toggled[sender] => move |btn| {
@@ -124,16 +185,18 @@ impl Component for GeneralPowerPageView {
                         },
                     },
 
-
                     adw::ActionRow {
                         set_title: "Power Saver",
                         set_subtitle: "Reduced performance and power usage",
                         set_activatable: true,
 
+                        set_activatable_widget: Some(&activatable_powersaver),
+
+                        #[name = "activatable_powersaver"]
                         add_prefix = &gtk::CheckButton {
                             #[watch]
                             set_active: model.power_mode == PowerMode::PowerSaver,
-                            connect_toggled[sender] => move |btn| {
+                            connect_activate[sender] => move |btn| {
                                 if btn.is_active() {
                                     sender.input(GeneralPowerPageViewMsg::SetPowerMode(PowerMode::PowerSaver));
                                 }
@@ -185,9 +248,19 @@ impl Component for GeneralPowerPageView {
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        let connection = Connection::system().unwrap();
+        let proxy = PpdProxyBlocking::new(&connection).unwrap();
+
         let model = Self {
-            power_mode: PowerMode::PowerSaver,
+            power_mode: get_current_profile(&proxy),
             show_battery_percentage: false,
+
+            ppd: Arc::new(proxy),
+            battery_percentage: get_battery_percentage(),
+            battery_status: get_battery_status(),
+            battery_percentage_float: get_battery_percentage().trim().parse::<f64>().unwrap(),
+
+            tracker: 0,
         };
 
         let widgets = view_output!();
@@ -199,10 +272,36 @@ impl Component for GeneralPowerPageView {
         match message {
             GeneralPowerPageViewMsg::SetPowerMode(mode) => {
                 self.power_mode = mode;
+
+                self.ppd
+                    .set_active_profile(format!("{}", mode).trim().to_lowercase())
+                    .unwrap();
             }
             GeneralPowerPageViewMsg::ToggleBatteryPercentage(state) => {
                 self.show_battery_percentage = state;
             }
+            GeneralPowerPageViewMsg::ChangeBattery => {
+                self.battery_percentage = get_battery_percentage();
+                self.battery_percentage_float =
+                    get_battery_percentage().trim().parse::<f64>().unwrap();
+            }
         }
+    }
+}
+
+fn get_battery_percentage() -> String {
+    fs::read_to_string("/sys/class/power_supply/BAT0/capacity").unwrap()
+}
+
+fn get_battery_status() -> String {
+    fs::read_to_string("/sys/class/power_supply/BAT0/status").unwrap()
+}
+
+fn get_current_profile(proxy: &PpdProxyBlocking) -> PowerMode {
+    match proxy.active_profile().unwrap().trim() {
+        "balanced" => PowerMode::Balanced,
+        "power-saver" => PowerMode::PowerSaver,
+        "performance" => PowerMode::Performance,
+        _ => PowerMode::Balanced,
     }
 }

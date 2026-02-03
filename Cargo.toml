@@ -17,3 +17,8 @@ gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
 relm4 = { version = "0.9.1", features = ["libadwaita", "gnome_47"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3"
+ppd = "0.1.0"
+zbus = { version = "5.13", default-features = false }
+tracker = "0.2.2"
+notify = { version = "8.1.0", features = ["serde"] }
+glib = "0.21.5"
