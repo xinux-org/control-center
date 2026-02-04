@@ -19,73 +19,29 @@ impl SimpleComponent for AccessibilityModel {
             add_top_bar = &adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: "System",
+                    set_title: "Accessibility",
                 }
             },
 
             adw::PreferencesPage {
                 adw::PreferencesGroup {
-                    set_title: "System",
+                    // set_title: "System",
                     
-                    adw::ActionRow {
-                        set_title: "Screen Lock",
-                        set_subtitle: "Automatic screen lock",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("channel-secure-symbolic"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "Location",
-                        set_subtitle: "Control access to your location",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("org.gnome.Settings-location-access-symbolic"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "File History and Trash",
-                        set_subtitle: "Remove saved data and files",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("org.gnome.Settings-users-symbolic"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
+                    adw::SwitchRow {
+                        set_title: "Always Show Accessibility Menu",
+                        set_subtitle: "Display the accessibility menu in the top bar"
+                    }
                 },
 
                 adw::PreferencesGroup {
-                    set_title: "Devices",
+                    // set_title: "Devices",
 
                     adw::ActionRow {
-                        set_title: "Cameras",
-                        set_subtitle: "Control camera acess",
+                        set_title: "Seeing",
                         set_activatable: true,
 
                         add_prefix = &gtk::Image {
-                            set_icon_name: Some("org.gnome.Settings-secure-shell-symbolic"),
+                            set_icon_name: Some("org.gnome.Settings-accessibility-seeing-symbolic"),
                             set_pixel_size: 16
                         },
 
@@ -96,12 +52,56 @@ impl SimpleComponent for AccessibilityModel {
                     },
 
                     adw::ActionRow {
-                        set_title: "Device Security",
-                        set_subtitle: "Hardware security status and information",
+                        set_title: "Hearing",
                         set_activatable: true,
 
                         add_prefix = &gtk::Image {
-                            set_icon_name: Some("org.gnome.Settings-device-security-symbolic"),
+                            set_icon_name: Some("org.gnome.Settings-accessibility-hearing-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Typing",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("org.gnome.Settings-accessibility-typing-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Pointing and Clicking",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("org.gnome.Settings-accessibility-pointing-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Zoom",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("oorg.gnome.Settings-accessibility-zoom-symbolic"),
                             set_pixel_size: 16
                         },
 

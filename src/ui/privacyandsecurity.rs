@@ -19,14 +19,14 @@ impl SimpleComponent for PrivacyAndSecurityModel {
             add_top_bar = &adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: "System",
+                    set_title: "Privacy and Secunrity",
                 }
             },
 
             adw::PreferencesPage {
                 adw::PreferencesGroup {
                     set_title: "System",
-                    
+
                     adw::ActionRow {
                         set_title: "Screen Lock",
                         set_subtitle: "Automatic screen lock",
