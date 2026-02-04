@@ -15,5 +15,6 @@ pub mod accounts;
 pub mod sharing;
 pub mod wellbeing;
 
+pub mod accessibility;
 pub mod system;
 pub mod privacyandsecurity;
