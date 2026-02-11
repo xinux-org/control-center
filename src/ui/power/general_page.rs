@@ -120,13 +120,6 @@ impl Component for GeneralPowerPageView {
                                 set_halign: gtk::Align::End,
                             },
                         },
-
-                        adw::ButtonRow {
-                            set_title: "Update battery",
-                            set_activatable: true,
-
-                            connect_activate => GeneralPowerPageViewMsg::ChangeBattery
-                        }
                     },
                 },
             },
@@ -258,7 +251,10 @@ impl Component for GeneralPowerPageView {
             ppd: Arc::new(proxy),
             battery_percentage: get_battery_percentage(),
             battery_status: get_battery_status(),
-            battery_percentage_float: get_battery_percentage().trim().parse::<f64>().unwrap(),
+            battery_percentage_float: get_battery_percentage()
+                .trim()
+                .parse::<f64>()
+                .unwrap_or(0.0),
 
             tracker: 0,
         };
@@ -290,11 +286,12 @@ impl Component for GeneralPowerPageView {
 }
 
 fn get_battery_percentage() -> String {
-    fs::read_to_string("/sys/class/power_supply/BAT0/capacity").unwrap()
+    fs::read_to_string("/sys/class/power_supply/BAT0/capacity")
+        .unwrap_or(String::from("No battery"))
 }
 
 fn get_battery_status() -> String {
-    fs::read_to_string("/sys/class/power_supply/BAT0/status").unwrap()
+    fs::read_to_string("/sys/class/power_supply/BAT0/status").unwrap_or(String::from(""))
 }
 
 fn get_current_profile(proxy: &PpdProxyBlocking) -> PowerMode {
