@@ -22,3 +22,4 @@ zbus = { version = "5.13", default-features = false }
 tracker = "0.2.2"
 notify = { version = "8.1.0", features = ["serde"] }
 glib = "0.21.5"
+regex = "1.12.3"

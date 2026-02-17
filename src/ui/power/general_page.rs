@@ -11,6 +11,7 @@ use std::sync::Arc;
 use std::thread;
 
 use notify::{Event, RecursiveMode, Result, Watcher};
+use regex::Regex;
 use std::{path::Path, sync::mpsc};
 
 use crate::ui::power::power_page::PowerMsg;
@@ -248,13 +249,22 @@ impl Component for GeneralPowerPageView {
             power_mode: get_current_profile(&proxy),
             show_battery_percentage: false,
 
+            // .unwrap() calls should be fixed ASAP!!!
             ppd: Arc::new(proxy),
-            battery_percentage: get_battery_percentage(),
-            battery_status: get_battery_status(),
-            battery_percentage_float: get_battery_percentage()
-                .trim()
-                .parse::<f64>()
-                .unwrap_or(0.0),
+            battery_percentage: read_file("capacity", String::from("No battery"))
+                .first()
+                .unwrap_or(&String::from("No battery"))
+                .to_string(),
+            battery_status: read_file("status", String::from(""))
+                .first()
+                .unwrap_or(&String::from(""))
+                .to_string(),
+            battery_percentage_float: *get_battery_percentages_float(read_file(
+                "capacity",
+                String::from("No battery"),
+            ))
+            .get(1)
+            .unwrap_or(&0.0),
 
             tracker: 0,
         };
@@ -277,21 +287,20 @@ impl Component for GeneralPowerPageView {
                 self.show_battery_percentage = state;
             }
             GeneralPowerPageViewMsg::ChangeBattery => {
-                self.battery_percentage = get_battery_percentage();
-                self.battery_percentage_float =
-                    get_battery_percentage().trim().parse::<f64>().unwrap();
+                self.battery_percentage = read_file("capacity", String::from("No battery"))
+                    .first()
+                    .unwrap()
+                    .to_string();
+                // It's a quick solution, will be fixed later
+                self.battery_percentage_float = *get_battery_percentages_float(read_file(
+                    "capacity",
+                    String::from("No battery"),
+                ))
+                .get(1)
+                .unwrap();
             }
         }
     }
-}
-
-fn get_battery_percentage() -> String {
-    fs::read_to_string("/sys/class/power_supply/BAT0/capacity")
-        .unwrap_or(String::from("No battery"))
-}
-
-fn get_battery_status() -> String {
-    fs::read_to_string("/sys/class/power_supply/BAT0/status").unwrap_or(String::from(""))
 }
 
 fn get_current_profile(proxy: &PpdProxyBlocking) -> PowerMode {
@@ -301,4 +310,34 @@ fn get_current_profile(proxy: &PpdProxyBlocking) -> PowerMode {
         "performance" => PowerMode::Performance,
         _ => PowerMode::Balanced,
     }
+}
+
+fn get_battery_path() -> Vec<fs::DirEntry> {
+    let global_path = Path::new("/sys/class/power_supply/");
+    let re = Regex::new(r"BAT[0-9]+").expect("Wrong RegEx");
+
+    let entries = match global_path.read_dir() {
+        Ok(els) => els,
+        Err(_) => return Vec::new(),
+    };
+
+    entries
+        .filter_map(|el| el.ok())
+        .filter(|el| re.is_match(el.path().to_str().unwrap()))
+        .collect()
+}
+
+fn read_file(file_name: &str, no_entry: String) -> Vec<String> {
+    let batteries = get_battery_path();
+
+    batteries
+        .iter()
+        .map(|el| {
+            fs::read_to_string(format!("{}/{}", el.path().display(), file_name))
+                .unwrap_or(no_entry.clone())
+        })
+        .collect()
+}
+fn get_battery_percentages_float(els: Vec<String>) -> Vec<f64> {
+    els.iter().map(|el| el.trim().parse().unwrap()).collect()
 }
