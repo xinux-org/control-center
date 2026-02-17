@@ -8,16 +8,11 @@ use zbus::blocking::Connection;
 use std::fmt;
 use std::fs;
 use std::sync::Arc;
-use std::thread;
 
-use notify::{Event, RecursiveMode, Result, Watcher};
 use regex::Regex;
-use std::{path::Path, sync::mpsc};
+use std::path::Path;
 
 use crate::ui::power::power_page::PowerMsg;
-
-use glib::ControlFlow;
-use glib::source::timeout_add_seconds;
 
 #[derive(Debug)]
 #[tracker::track]
