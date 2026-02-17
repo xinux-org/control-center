@@ -249,7 +249,7 @@ impl Component for GeneralPowerPageView {
             power_mode: get_current_profile(&proxy),
             show_battery_percentage: false,
 
-            // .unwrap() calls should be fixed ASAP!!!
+            // .unwrap() calls should be fixed ASAP!!
             ppd: Arc::new(proxy),
             battery_percentage: read_file("capacity", String::from("No battery"))
                 .first()
