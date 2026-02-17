@@ -291,8 +291,8 @@ impl Component for GeneralPowerPageView {
                     "capacity",
                     String::from("No battery"),
                 ))
-                .get(1)
-                .unwrap();
+                .first()
+                .unwrap_or(&0.0)
             }
         }
     }
