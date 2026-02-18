@@ -9,10 +9,10 @@ use gtk::{gio, glib};
 use crate::config::{APP_ID, PROFILE};
 use crate::ui::{
     about::AboutDialog, accessibility::AccessibilityModel, accounts::AccountsModel,
-    bluetooth::BluetoothModel, display::DisplayModel, multitasking::MultitaskingModel,
-    network::NetworkModel, notifications::NotificationsModel, power::PowerModel,
-    privacyandsecurity::PrivacyAndSecurityModel, sharing::SharingModel, sound::SoundModel,
-    system::SystemPageModel, wellbeing::WellbeingModel, wifi::WifiModel,
+    bluetooth::BluetoothModel, display::DisplayModel, mouse::MouseAndTouchpad,
+    multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel,
+    power::PowerModel, privacyandsecurity::PrivacyAndSecurityModel, sharing::SharingModel,
+    sound::SoundModel, system::SystemPageModel, wellbeing::WellbeingModel, wifi::WifiModel,
 };
 
 use crate::ui::apps::AppModal;
@@ -25,15 +25,16 @@ pub(super) struct App {
     _network: Controller<NetworkModel>,
     _bluetooth: Controller<BluetoothModel>,
     _display: Controller<DisplayModel>,
-    _notifications: Controller<NotificationsModel>,
     _sound: Controller<SoundModel>,
-    _search: Controller<SearchModal>,
-    _apps: Controller<AppModal>,
     _power: Controller<PowerModel>,
     _multitasking: Controller<MultitaskingModel>,
+    _apps: Controller<AppModal>,
+    _notifications: Controller<NotificationsModel>,
+    _search: Controller<SearchModal>,
     _accounts: Controller<AccountsModel>,
     _sharing: Controller<SharingModel>,
     _wellbeing: Controller<WellbeingModel>,
+    _mouse: Controller<MouseAndTouchpad>,
     _accessibility: Controller<AccessibilityModel>,
     _privacyandsecurity: Controller<PrivacyAndSecurityModel>,
     _system: Controller<SystemPageModel>,
@@ -61,7 +62,7 @@ impl SimpleComponent for App {
             section! {
                 "_Preferences" => PreferencesAction,
                 "_Keyboard" => ShortcutsAction,
-                "_About GTK Rust Template" => AboutAction,
+                "_About" => AboutAction,
             }
         }
     }
@@ -156,6 +157,7 @@ impl SimpleComponent for App {
             add_titled: (accounts.widget(), Some("accounts"), "Online Accounts"),
             add_titled: (sharing.widget(), Some("sharing"), "Sharing"),
             add_titled: (wellbeing.widget(), Some("wellbeing"), "Wellbeing"),
+            add_titled: (mouse.widget(), Some("mouse"), "Mouse and Touchpad"),
             add_titled: (accessibility.widget(), Some("accessibility"), "Acccesibility"),
             add_titled: (privacyandsecurity.widget(), Some("privacyandsecurity"), "Privacy and Security"),
             add_titled: (system.widget(), Some("system"), "System"),
@@ -184,19 +186,19 @@ impl SimpleComponent for App {
         let sound = SoundModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-        let notifications = NotificationsModel::builder()
+        let power = PowerModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-        let search = SearchModal::builder()
+        let multitasking = MultitaskingModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
         let apps = AppModal::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-        let power = PowerModel::builder()
+        let notifications = NotificationsModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
-        let multitasking = MultitaskingModel::builder()
+        let search = SearchModal::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
         let accounts = AccountsModel::builder()
@@ -206,6 +208,9 @@ impl SimpleComponent for App {
             .launch(())
             .forward(sender.input_sender(), identity);
         let wellbeing = WellbeingModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
+        let mouse = MouseAndTouchpad::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
         let accessibility = AccessibilityModel::builder()
@@ -226,17 +231,18 @@ impl SimpleComponent for App {
             _bluetooth: bluetooth,
             _display: display,
             _sound: sound,
-            _notifications: notifications,
-            _search: search,
-            _apps: apps,
             _power: power,
             _multitasking: multitasking,
+            _apps: apps,
+            _notifications: notifications,
+            _search: search,
             _accounts: accounts,
             _sharing: sharing,
             _wellbeing: wellbeing,
+            _mouse: mouse,
             _accessibility: accessibility,
-            _system: system,
             _privacyandsecurity: privacyandsecurity,
+            _system: system,
         };
 
         widgets.stack.connect_visible_child_notify({
