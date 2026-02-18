@@ -20,56 +20,181 @@ impl SimpleComponent for MouseAndTouchpad {
             add_top_bar = &adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: "Mouse and Touchpad",
+                    set_title: "Mouse & Touchpad",
                 }
             },
-            adw::PreferencesPage {
-                adw::PreferencesGroup {
+
+            #[wrap(Some)]
+            set_content = &adw::PreferencesPage {
+                add = &adw::PreferencesGroup {
                     set_title: "General",
 
-                    adw::ActionRow {
-                        set_title: "Scale",
+                    add = &adw::ActionRow {
+                        set_title: "Primary Button",
+                        set_subtitle: "Order of physical buttons on mice and touchpads",
 
                         add_suffix = &gtk::Box {
-                            set_spacing: 8,
+                            set_spacing: 0,
                             set_halign: gtk::Align::End,
+                            set_valign: gtk::Align::Center,
+                            add_css_class: "linked",
 
-                            gtk::ToggleButton {
-                                set_label: "100 %",
-                                // set_active: true,
-                                // add_css_class: "flat",
+                            append = &gtk::ToggleButton {
+                                set_label: "Left",
+                                set_active: true,
                             },
 
-                            gtk::ToggleButton {
-                                set_label: "200 %",
-                                // add_css_class: "flat",
+                            append = &gtk::ToggleButton {
+                                set_label: "Right",
                             },
                         }
                     },
                 },
 
-                adw::PreferencesGroup {
-                    adw::ActionRow {
-                        set_title: "Night Light",
-                        set_activatable: true,
 
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("night-light-symbolic"),
-                        },
+                add = &adw::PreferencesGroup {
+                    set_title: "Mouse",
+
+                    add = &adw::ActionRow {
+                        set_title: "Pointer Speed",
 
                         add_suffix = &gtk::Box {
-                            set_spacing: 12,
-                            set_halign: gtk::Align::End,
+                            set_orientation: gtk::Orientation::Horizontal,
+                            set_spacing: 6,
+                            set_halign: gtk::Align::Fill,
+                            set_valign: gtk::Align::Center,
+                            set_hexpand: true,
 
-                            gtk::Label {
-                                set_label: "Off",
+                            append = &gtk::Label {
+                                set_label: "Slow",
                                 add_css_class: "dim-label",
                             },
 
-                            gtk::Image {
-                                set_icon_name: Some("go-next-symbolic"),
+                            append = &gtk::Scale {
+                                set_orientation: gtk::Orientation::Horizontal,
+                                set_hexpand: true,
+                                set_draw_value: false,
+                                set_range: (0.0, 1.0),
+                                set_value: 0.6,
+                            },
+
+                            append = &gtk::Label {
+                                set_label: "Fast",
+                                add_css_class: "dim-label",
                             },
                         }
+                    },
+
+
+                    add = &adw::SwitchRow {
+                        set_title: "Mouse Acceleration",
+                        set_subtitle: "Recommended for most users and applications",
+                        set_active: true,
+                    },
+                },
+
+
+                add = &adw::PreferencesGroup {
+                    set_title: "Scroll Direction",
+
+                    add = &adw::ActionRow {
+
+                        add_suffix = &gtk::Box {
+                            set_orientation: gtk::Orientation::Horizontal,
+                            set_spacing: 12,
+                            set_homogeneous: true,
+                            set_hexpand: true,
+
+                            append = &gtk::Box {
+                                set_orientation: gtk::Orientation::Vertical,
+                                set_spacing: 6,
+
+                                append = &gtk::Frame {
+                                    set_hexpand: true,
+
+                                    #[wrap(Some)]
+                                    set_child = &gtk::Image {
+                                        set_icon_name: Some("input-mouse-symbolic"),
+                                        set_pixel_size: 64,
+                                    },
+                                },
+
+                                append = &gtk::Box {
+                                    set_orientation: gtk::Orientation::Horizontal,
+                                    set_spacing: 6,
+                                    set_halign: gtk::Align::Start,
+
+                                    append = &gtk::CheckButton {
+                                        set_active: true,
+                                    },
+
+                                    append = &gtk::Box {
+                                        set_orientation: gtk::Orientation::Vertical,
+
+                                        append = &gtk::Label {
+                                            set_label: "Traditional",
+                                            set_halign: gtk::Align::Start,
+                                        },
+
+                                        append = &gtk::Label {
+                                            set_label: "Scrolling moves the view",
+                                            set_halign: gtk::Align::Start,
+                                            add_css_class: "dim-label",
+                                            add_css_class: "caption",
+                                        },
+                                    },
+                                },
+                            },
+
+                            append = &gtk::Box {
+                                set_orientation: gtk::Orientation::Vertical,
+                                set_spacing: 6,
+
+                                append = &gtk::Frame {
+                                    set_hexpand: true,
+                                    #[wrap(Some)]
+                                    set_child = &gtk::Image {
+                                        set_icon_name: Some("input-mouse-symbolic"),
+                                        set_pixel_size: 64,
+                                    },
+                                },
+
+                                append = &gtk::Box {
+                                    set_orientation: gtk::Orientation::Horizontal,
+                                    set_spacing: 6,
+                                    set_halign: gtk::Align::Start,
+
+                                    append = &gtk::CheckButton {
+                                        set_active: false,
+                                    },
+
+                                    append = &gtk::Box {
+                                        set_orientation: gtk::Orientation::Vertical,
+
+                                        append = &gtk::Label {
+                                            set_label: "Natural",
+                                            set_halign: gtk::Align::Start,
+                                        },
+
+                                        append = &gtk::Label {
+                                            set_label: "Scrolling moves the content",
+                                            set_halign: gtk::Align::Start,
+                                            add_css_class: "dim-label",
+                                            add_css_class: "caption",
+                                        },
+                                    },
+                                },
+                            },
+                        }
+                    },
+                },
+
+
+                add = &adw::PreferencesGroup {
+                    add = &gtk::Button {
+                        set_label: "Test Settings",
+                        set_halign: gtk::Align::Fill,
+                        add_css_class: "pill",
                     },
                 },
             }
