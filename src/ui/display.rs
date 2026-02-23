@@ -72,15 +72,20 @@ impl SimpleComponent for DisplayModel {
                         set_title: "Scale",
 
                         add_suffix = &gtk::Box {
-                            set_spacing: 8,
+                            set_spacing: 0,
                             set_halign: gtk::Align::End,
+                            set_valign: gtk::Align::Center,
+                            add_css_class: "linked",
 
+                            #[name="left"]
                             gtk::ToggleButton {
+                                set_group: Some(&right),
                                 set_label: "100 %",
-                                // set_active: true,
+                                set_active: true,
                                 // add_css_class: "flat",
                             },
 
+                            #[name="right"]
                             gtk::ToggleButton {
                                 set_label: "200 %",
                                 // add_css_class: "flat",
