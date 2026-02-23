@@ -19,7 +19,7 @@ impl SimpleComponent for AboutDialog {
             .license_type(gtk::License::Apache20)
             .website("https://xinux.uz/")
             .issue_url("https://github.com/xinux-org/control-center/issues")
-            .application_name("Xinux Control Center")
+            .application_name("Xinux Settings")
             .version(VERSION)
             .translator_credits("translator-credits")
             .copyright("© 2025 Xinux Developers")
