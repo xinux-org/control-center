@@ -88,14 +88,12 @@ impl SimpleComponent for MouseAndTouchpad {
                         }
                     },
 
-
                     add = &adw::SwitchRow {
                         set_title: "Mouse Acceleration",
                         set_subtitle: "Recommended for most users and applications",
                         set_active: true,
                     },
                 },
-
 
                 add = &adw::PreferencesGroup {
                     set_title: "Scroll Direction",
@@ -194,12 +192,10 @@ impl SimpleComponent for MouseAndTouchpad {
                     },
                 },
 
-
                 add = &adw::PreferencesGroup {
-                    add = &gtk::Button {
-                        set_label: "Test Settings",
-                        set_halign: gtk::Align::Fill,
-                        add_css_class: "pill",
+                    add = &adw::ButtonRow {
+                            set_title: "Test Settings",
+                            set_end_icon_name: Some("go-next-symbolic"),
                     },
                 },
             }
