@@ -39,11 +39,14 @@ impl SimpleComponent for MouseAndTouchpad {
                             set_valign: gtk::Align::Center,
                             add_css_class: "linked",
 
+                            #[name= "left" ]
                             append = &gtk::ToggleButton {
+                                set_group: Some(&right),
                                 set_label: "Left",
                                 set_active: true,
                             },
 
+                            #[name= "right" ]
                             append = &gtk::ToggleButton {
                                 set_label: "Right",
                             },
@@ -124,6 +127,7 @@ impl SimpleComponent for MouseAndTouchpad {
                                     set_spacing: 6,
                                     set_halign: gtk::Align::Start,
 
+                                    #[name = "traditional"]
                                     append = &gtk::CheckButton {
                                         set_active: true,
                                     },
@@ -165,6 +169,7 @@ impl SimpleComponent for MouseAndTouchpad {
                                     set_halign: gtk::Align::Start,
 
                                     append = &gtk::CheckButton {
+                                        set_group: Some(&traditional),
                                         set_active: false,
                                     },
 
