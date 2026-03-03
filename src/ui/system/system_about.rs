@@ -59,7 +59,7 @@ impl SimpleComponent for SystemAboutPage {
                     set_valign: gtk::Align::Center,
                     set_spacing: 5,
                     set_margin_all: 5,
-                    
+
                     gtk::Image {
                         set_pixel_size: 220,
                         set_paintable: Some(&embedded_logo()),
@@ -170,6 +170,8 @@ impl SimpleComponent for SystemAboutPage {
             ..Default::default()
         };
 
+        // Copyright 2023 System76 <info@system76.com>
+        // SPDX-License-Identifier: GPL-3.0-only
         let mut sys = sysinfo::System::new();
         let disks = sysinfo::Disks::new_with_refreshed_list();
         sys.refresh_memory();
@@ -235,6 +237,9 @@ fn architecture() -> String {
         .to_string()
 }
 
+// Copyright 2023 System76 <info@system76.com>
+// SPDX-License-Identifier: GPL-3.0-only
+//
 fn kernel_version() -> String {
     read_to_string("/proc/version")
         .and_then(|content| content.split_whitespace().nth(2).map(|s| s.to_string()))
