@@ -51,21 +51,27 @@ impl SimpleComponent for SystemAboutPage {
 
                 add_top_bar = &adw::HeaderBar {},
 
-                adw::Clamp {
-                  gtk::Image {
-                      set_pixel_size: 220,
-                      set_paintable: Some(&embedded_logo()),
-                  },
-                },
-
-                adw::PreferencesGroup {
-                    adw::EntryRow {
-                        set_title: "Device Name",
+                gtk::Box {
+                    set_orientation: gtk::Orientation::Vertical,
+                    set_hexpand: true,
+                    set_vexpand: true,
+                    set_halign: gtk::Align::Center,
+                    set_valign: gtk::Align::Center,
+                    set_spacing: 5,
+                    set_margin_all: 5,
+                    
+                    gtk::Image {
+                        set_pixel_size: 220,
+                        set_paintable: Some(&embedded_logo()),
                     },
-
                 },
 
                 adw::PreferencesPage {
+                    adw::PreferencesGroup {
+                        adw::EntryRow {
+                            set_title: "Device Name",
+                        },
+                    },
                     adw::PreferencesGroup {
                       set_title: "Hardware",
 
@@ -74,13 +80,6 @@ impl SimpleComponent for SystemAboutPage {
 
                             add_suffix = &gtk::Label {
                               set_label: &model.hardware_model
-                            }
-                        },
-                        adw::ActionRow {
-                            set_title: "Memory",
-
-                            add_suffix = &gtk::Label {
-                              set_label: &model.memory
                             }
                         },
                         adw::ActionRow {
@@ -95,6 +94,13 @@ impl SimpleComponent for SystemAboutPage {
 
                             add_suffix = &gtk::Label {
                               set_label: "&model.graphics"
+                            }
+                        },
+                        adw::ActionRow {
+                            set_title: "Memory",
+
+                            add_suffix = &gtk::Label {
+                              set_label: &model.memory
                             }
                         },
                         adw::ActionRow {
@@ -116,7 +122,6 @@ impl SimpleComponent for SystemAboutPage {
                             set_label: &model.operating_system
                           }
                       },
-
                       adw::ActionRow {
                           set_title: "Operating System architecture",
 
@@ -124,7 +129,6 @@ impl SimpleComponent for SystemAboutPage {
                             set_label: &model.os_architecture
                           }
                       },
-
                       adw::ActionRow {
                           set_title: "Karnel version",
 
@@ -132,7 +136,6 @@ impl SimpleComponent for SystemAboutPage {
                             set_label: &model.kernel_version
                           }
                       },
-
                       adw::ActionRow {
                           set_title: "Desktop environment",
 
@@ -140,7 +143,6 @@ impl SimpleComponent for SystemAboutPage {
                             set_label: &model.desktop_environment
                           }
                       },
-
                       adw::ActionRow {
                           set_title: "Windowing system",
 
