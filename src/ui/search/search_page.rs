@@ -73,14 +73,15 @@ impl SimpleComponent for SearchModal {
         _root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let widgets = view_output!();
-
         let search_locations = SearchLocationsPage::builder().launch(()).detach();
 
-        let model = SearchModal {
-            navigation: widgets.navigation.clone(),
+        let mut model = SearchModal {
+            navigation: adw::NavigationView::new(),
             search_locations,
         };
+
+        let widgets = view_output!();
+        model.navigation = widgets.navigation.clone();
 
         ComponentParts { model, widgets }
     }
