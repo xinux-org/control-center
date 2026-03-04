@@ -17,3 +17,6 @@ gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
 relm4 = { version = "0.9.1", features = ["libadwaita", "gnome_47"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3"
+# system infos
+sysinfo = "0.38.3"
+wgpu = "27.0.1"
