@@ -14,6 +14,9 @@ lto = true
 
 [dependencies]
 gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
+glib = "0.22.0"
+nmrs = "2.0.1"
 relm4 = { version = "0.9.1", features = ["libadwaita", "gnome_47"] }
 tracing = "0.1.41"
 tracing-subscriber = "0.3"
+zbus = "5.14.0"
