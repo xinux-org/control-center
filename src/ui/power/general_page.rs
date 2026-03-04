@@ -14,6 +14,73 @@ use std::path::Path;
 
 use crate::ui::power::power_page::PowerMsg;
 
+#[derive(Debug, Clone)]
+struct BatteryModel {
+    percentage: f64,
+    percentage_text: String,
+    status: String,
+}
+
+#[relm4::factory(pub)]
+impl FactoryComponent for BatteryModel {
+    type Init = (f64, String, String);
+    type Input = ();
+    type Output = ();
+    type CommandOutput = ();
+    type ParentWidget = gtk::Box;
+
+    view! {
+        #[root]
+        adw::PreferencesGroup {
+            gtk::Box {
+                set_orientation: gtk::Orientation::Vertical,
+                set_valign: gtk::Align::Center,
+                set_spacing: 8,
+                set_margin_all: 16,
+                add_css_class: "action-row",
+
+                gtk::LevelBar {
+                    set_min_value: 1.0,
+                    set_max_value: 100.0,
+                    add_offset_value: ("low", 20.0),
+                    add_offset_value: ("high", 60.0),
+                    add_offset_value: ("full", 100.0),
+                    #[watch]
+                    set_value: self.percentage,
+                    set_hexpand: true,
+                    add_css_class: "battery-bar",
+                },
+
+                gtk::Box {
+                    set_orientation: gtk::Orientation::Horizontal,
+                    set_spacing: 8,
+
+                    gtk::Label {
+                        #[watch]
+                        set_label: &self.status,
+                        set_halign: gtk::Align::Start,
+                        set_hexpand: true,
+                    },
+
+                    gtk::Label {
+                        #[watch]
+                        set_label: &self.percentage_text,
+                        set_halign: gtk::Align::End,
+                    },
+                },
+            },
+        }
+    }
+
+    fn init_model(init: Self::Init, _index: &DynamicIndex, _sender: FactorySender<Self>) -> Self {
+        Self {
+            percentage: init.0,
+            percentage_text: init.1,
+            status: init.2,
+        }
+    }
+}
+
 #[derive(Debug)]
 #[tracker::track]
 pub struct GeneralPowerPageView {
@@ -23,6 +90,8 @@ pub struct GeneralPowerPageView {
     pub battery_percentage: String,
     pub battery_status: String,
     pub battery_percentage_float: f64,
+    #[tracker::do_not_track]
+    batteries: FactoryVecDeque<BatteryModel>,
     #[tracker::do_not_track]
     pub ppd: Arc<PpdProxyBlocking<'static>>,
 }
@@ -74,52 +143,12 @@ impl Component for GeneralPowerPageView {
                     add_css_class: "heading",
                 },
 
-                adw::PreferencesGroup {
-                    gtk::Box {
-                        set_orientation: gtk::Orientation::Vertical,
-                        set_valign: gtk::Align::Center,
-                        set_spacing: 8,
-                        set_margin_all: 16,
-
-                        add_css_class: "action-row",
-
-                        gtk::LevelBar {
-                            set_min_value: 1.0,
-                            set_max_value: 100.0,
-
-                            add_offset_value: ("low", 20.0),
-                            add_offset_value: ("high", 60.0),
-                            add_offset_value: ("full", 100.0),
-
-                            #[watch]
-                            set_value: model.battery_percentage_float,
-
-                            set_hexpand: true,
-                            add_css_class: "battery-bar",
-                        },
-
-                        gtk::Box {
-                            set_orientation: gtk::Orientation::Horizontal,
-                            set_spacing: 8,
-
-                            gtk::Label {
-                                #[watch]
-                                set_label: model.battery_status.as_str(),
-                                set_halign: gtk::Align::Start,
-                                set_hexpand: true,
-                            },
-
-                            gtk::Label {
-                                #[watch]
-                                // #[track(model.changed(GeneralPowerPageView::battery_percentage()))]
-                                set_label: model.battery_percentage.as_str(),
-                                set_halign: gtk::Align::End,
-                            },
-                        },
-                    },
+                #[local_ref]
+                battery_list -> gtk::Box {
+                    set_orientation: gtk::Orientation::Vertical,
+                    set_spacing: 8,
                 },
             },
-
 
             gtk::Box {
                 set_orientation: gtk::Orientation::Vertical,
@@ -240,7 +269,24 @@ impl Component for GeneralPowerPageView {
         let connection = Connection::system().unwrap();
         let proxy = PpdProxyBlocking::new(&connection).unwrap();
 
+        let mut batteries = FactoryVecDeque::builder()
+            .launch_default()
+            .detach();
+
+        let percentages_float = get_battery_percentages_float(read_file("capacity", "0".into()));
+        let percentages_text = read_file("capacity", "0".into());
+        let statuses = read_file("status", "Unknown".into());
+
+        for i in 0..percentages_float.len() {
+            batteries.guard().push_back((
+                percentages_float[i],
+                format!("{}%", percentages_text[i].trim()),
+                statuses[i].trim().to_string(),
+            ));
+        }
+
         let model = Self {
+            batteries,
             power_mode: get_current_profile(&proxy),
             show_battery_percentage: false,
 
@@ -264,6 +310,7 @@ impl Component for GeneralPowerPageView {
             tracker: 0,
         };
 
+        let battery_list = model.batteries.widget();
         let widgets = view_output!();
 
         ComponentParts { model, widgets }
