@@ -82,33 +82,11 @@ impl FactoryComponent for BatteryModel {
 }
 
 #[derive(Debug)]
-struct Battery {}
-
-#[relm4::factory]
-impl FactoryComponent for Battery {
-    type Init = String;
-    type Input = ();
-    type Output = ();
-    type CommandOutput = ();
-    type ParentWidget = gtk::Box;
-
-    view! {
-        root = gtk::Box {}
-    }
-
-    fn init_model(init: Self::Init, _index: &DynamicIndex, _sender: FactorySender<Self>) -> Self {
-        Self {}
-    }
-}
-
-#[derive(Debug)]
 #[tracker::track]
 pub struct GeneralPowerPageView {
     pub power_mode: PowerMode,
     pub show_battery_percentage: bool,
 
-    #[tracker::do_not_track]
-    pub batteries: FactoryVecDeque<Battery>,
     pub battery_percentage: String,
     pub battery_status: String,
     pub battery_percentage_float: f64,
