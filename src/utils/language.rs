@@ -541,19 +541,19 @@ pub fn get_lang(code: String) -> Result<String> {
         .to_string())
 }
 
-pub fn get_country(code: String) -> Result<String> {
-    Ok(code
-        .split('_')
-        .nth(1)
-        .context("Invalid country")?
-        .split('.')
-        .next()
-        .context("Invalid country")?
-        .split('/')
-        .next()
-        .context("Invalid country")?
-        .split('@')
-        .next()
-        .context("Invalid country")?
-        .to_string())
-}
+// pub fn get_country(code: String) -> Result<String> {
+//     Ok(code
+//         .split('_')
+//         .nth(1)
+//         .context("Invalid country")?
+//         .split('.')
+//         .next()
+//         .context("Invalid country")?
+//         .split('/')
+//         .next()
+//         .context("Invalid country")?
+//         .split('@')
+//         .next()
+//         .context("Invalid country")?
+//         .to_string())
+// }

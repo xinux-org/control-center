@@ -10,3 +10,16 @@
 .bold {
   font-weight: bold;
 }
+
+.battery-bar.level-low trough block {
+    background-color: #f44336; 
+}
+
+.battery-bar.level-high trough block {
+    background-color: #ff9800; 
+}
+
+.battery-bar.level-full trough block {
+    background-color: #4caf50; 
+}
+
