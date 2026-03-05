@@ -9,15 +9,33 @@ repository = "https://github.com/xinux-org/settings"
 authors = ["bemeritus", "ae5259"]
 publish = false
 
+[workspace]
+members = [".", "s-helper"]
+default-members = [".", "s-helper"]
+
+# Optimize release binary as much as possible
 [profile.release]
 lto = true
+codegen-units = 1
+incremental = true
+strip = true
+opt-level = "z"
+
+[profile.dev]
+opt-level = 1
+lto = "thin"
+
+[profile.dev.package."*"]
+opt-level = 3
 
 [dependencies]
 gettext-rs = { version = "0.7.7", features = ["gettext-system"] }
 relm4 = { version = "0.9.1", features = ["libadwaita", "gnome_47"] }
+sourceview5 = { version = "0.9.1" }
 tracing = "0.1.41"
 tracing-subscriber = "0.3"
 tracker = "0.2.2"
+nix-editor = "0.3.0"
 
 # system infos
 sysinfo = "0.38.3"

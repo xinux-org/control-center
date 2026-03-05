@@ -2,31 +2,30 @@
   pkgs,
   crane,
   ...
-}: let
+}:
+let
   # Manifest via Cargo.toml
   manifest = (pkgs.lib.importTOML ./Cargo.toml).package;
 
   craneLib = crane.mkLib pkgs;
 
   commonBuildInputs = with pkgs; [
-    desktop-file-utils
+    gtk4
     glib
     gnome-desktop
-    gtk4
     libadwaita
     openssl
-    rustPlatform.bindgenHook
+    gtksourceview5
+    polkit
   ];
 
   commonNativeBuildInputs = with pkgs; [
-    openssl
     appstream
     desktop-file-utils
     gettext
     meson
     ninja
     pkg-config
-    # rustc
     wrapGAppsHook4
   ];
 
@@ -38,40 +37,39 @@
     buildInputs = commonBuildInputs;
   };
 in
-  craneLib.buildPackage {
-    pname = manifest.name;
-    version = manifest.version;
-    strictDeps = true;
+craneLib.buildPackage {
+  pname = manifest.name;
+  version = manifest.version;
+  strictDeps = true;
 
-    src = pkgs.lib.cleanSource ./.;
+  src = pkgs.lib.cleanSource ./.;
 
-    cargoDeps = pkgs.rustPlatform.importCargoLock {
-      lockFile = ./Cargo.lock;
-    };
+  cargoDeps = pkgs.rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+  };
 
-    inherit cargoArtifacts;
+  inherit cargoArtifacts;
 
-    nativeBuildInputs = commonNativeBuildInputs;
-    buildInputs = commonBuildInputs;
+  nativeBuildInputs = commonNativeBuildInputs;
+  buildInputs = commonBuildInputs;
 
-    configurePhase = ''
-      mesonConfigurePhase
-      runHook postConfigure
-    '';
+  configurePhase = ''
+    mesonConfigurePhase
+    runHook postConfigure
+  '';
 
-    buildPhase = ''
-      runHook preBuild
-      ninjaBuildPhase
-      runHook postBuild
-    '';
+  buildPhase = ''
+    runHook preBuild
+    ninjaBuildPhase
+    runHook postBuild
+  '';
 
-    installPhase = ''
-      runHook preInstall
-      mesonInstallPhase
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mesonInstallPhase
+    runHook postInstall
+  '';
 
-    doNotPostBuildInstallCargoBinaries = true;
-    checkPhase = false;
-  }
-
+  doNotPostBuildInstallCargoBinaries = true;
+  checkPhase = false;
+}
