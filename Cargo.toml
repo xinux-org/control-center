@@ -25,3 +25,6 @@ wgpu = "27.0.1"
 
 anyhow = "1.0.102"
 gnome-desktop = { package = "gnome-desktop-xinux", version = "0.4.3" }
+nmrs = "2.0.1"
+zbus = "5.14.0"
+glib = "0.22.2"
