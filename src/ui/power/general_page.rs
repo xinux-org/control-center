@@ -82,11 +82,33 @@ impl FactoryComponent for BatteryModel {
 }
 
 #[derive(Debug)]
+struct Battery {}
+
+#[relm4::factory]
+impl FactoryComponent for Battery {
+    type Init = String;
+    type Input = ();
+    type Output = ();
+    type CommandOutput = ();
+    type ParentWidget = gtk::Box;
+
+    view! {
+        root = gtk::Box {}
+    }
+
+    fn init_model(init: Self::Init, _index: &DynamicIndex, _sender: FactorySender<Self>) -> Self {
+        Self {}
+    }
+}
+
+#[derive(Debug)]
 #[tracker::track]
 pub struct GeneralPowerPageView {
     pub power_mode: PowerMode,
     pub show_battery_percentage: bool,
 
+    #[tracker::do_not_track]
+    pub batteries: FactoryVecDeque<Battery>,
     pub battery_percentage: String,
     pub battery_status: String,
     pub battery_percentage_float: f64,
@@ -269,9 +291,7 @@ impl Component for GeneralPowerPageView {
         let connection = Connection::system().unwrap();
         let proxy = PpdProxyBlocking::new(&connection).unwrap();
 
-        let mut batteries = FactoryVecDeque::builder()
-            .launch_default()
-            .detach();
+        let mut batteries = FactoryVecDeque::builder().launch_default().detach();
 
         let percentages_float = get_battery_percentages_float(read_file("capacity", "0".into()));
         let percentages_text = read_file("capacity", "0".into());
