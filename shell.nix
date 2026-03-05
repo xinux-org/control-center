@@ -50,14 +50,13 @@ in
       pkg-config
       libgweather
       gnome-desktop
+      gtksourceview5
       appstream
+      appstream-glib
       wrapGAppsHook4
       desktop-file-utils
       gobject-introspection
       rustPlatform.bindgenHook
-
-      # Bootstrap
-      python3
     ];
 
     # Set Environment Variables

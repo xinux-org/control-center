@@ -241,7 +241,7 @@ impl SimpleComponent for LanguageModel {
         languages.sort_by(|a, b| a.0.cmp(&b.0));
         for (title, languages) in languages {
             for locale in &shortlangs {
-                if let Some(title) = languages.get(&locale.to_string()) {
+                if let Some(title) = languages.get(locale.to_owned()) {
                     view! {
                         row = adw::PreferencesRow {
                             set_title: locale,
@@ -420,6 +420,8 @@ impl SimpleComponent for LanguageModel {
                         .next()
                         .unwrap_or_default(),
                 );
+                
+                
             }
             LanguageModelMsg::CheckSelected => {
                 trace!(
