@@ -2,6 +2,7 @@ use std::convert::identity;
 
 use crate::app::AppMsg;
 use crate::ui::system::system_about::SystemAboutPage;
+use crate::ui::system::system_l10n::SystemRegionLanguagePage;
 use relm4::adw::prelude::*;
 use relm4::gtk;
 use relm4::prelude::*;
@@ -10,11 +11,13 @@ use relm4::prelude::*;
 pub struct SystemPageModel {
     navigation: adw::NavigationView,
     system_about: Controller<SystemAboutPage>,
+    system_l10n: Controller<SystemRegionLanguagePage>,
 }
 
 #[derive(Debug)]
 pub enum SystemPageMsg {
     OpenSystemAboutPage,
+    OpenSystemRegionLanguagePage
 }
 
 #[relm4::component(pub)]
@@ -49,7 +52,9 @@ impl SimpleComponent for SystemPageModel {
                               add_suffix = &gtk::Image {
                                   set_icon_name: Some("go-next-symbolic"),
                                   set_pixel_size: 16,
-                              }
+                              },
+                              
+                              connect_activated => SystemPageMsg::OpenSystemRegionLanguagePage,
                           },
 
                           adw::ActionRow {
@@ -133,9 +138,14 @@ impl SimpleComponent for SystemPageModel {
             .launch(())
             .forward(sender.input_sender(), identity);
 
+        let system_l10n = SystemRegionLanguagePage::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
+
         let mut model = Self {
             navigation: adw::NavigationView::new(),
             system_about,
+            system_l10n,
         };
 
         let widgets = view_output!();
@@ -147,6 +157,10 @@ impl SimpleComponent for SystemPageModel {
         match message {
             SystemPageMsg::OpenSystemAboutPage => {
                 let page = self.system_about.widget();
+                self.navigation.push(page);
+            },
+            SystemPageMsg::OpenSystemRegionLanguagePage => {
+                let page = self.system_l10n.widget();
                 self.navigation.push(page);
             }
         }
