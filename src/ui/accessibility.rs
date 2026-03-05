@@ -4,10 +4,10 @@ use relm4::gtk;
 use relm4::prelude::*;
 
 #[derive(Debug, Clone, Copy)]
-pub struct SystemPageModel {}
+pub struct AccessibilityModel {}
 
 #[relm4::component(pub)]
-impl SimpleComponent for SystemPageModel {
+impl SimpleComponent for AccessibilityModel {
     type Init = ();
     type Input = ();
     type Output = AppMsg;
@@ -19,92 +19,99 @@ impl SimpleComponent for SystemPageModel {
             add_top_bar = &adw::HeaderBar {
                 #[wrap(Some)]
                 set_title_widget = &adw::WindowTitle {
-                    set_title: "System",
+                    set_title: "Accessibility",
                 }
             },
 
             adw::PreferencesPage {
                 adw::PreferencesGroup {
-                    adw::ActionRow {
-                        set_title: "Region and Language",
-                        set_subtitle: "System language and localization",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("emoji-flags-symbolic"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "Date and Time",
-                        set_subtitle: "Time zone and clock settings",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("preferences-system-time-symbolic"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "Users",
-                        set_subtitle: "Add and remove accounts, change password",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("org.gnome.Settings-users-symbolic"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "Secure Shell",
-                        set_subtitle: "SSH network access",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("org.gnome.Settings-secure-shell-symbolic"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
-
-                    adw::ActionRow {
-                        set_title: "About",
-                        set_subtitle: "Hardware details and software versions",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("dialog-warning-symbolicc"),
-                            set_pixel_size: 16
-                        },
-
-                        add_suffix = &gtk::Image {
-                            set_icon_name: Some("go-next-symbolic"),
-                            set_pixel_size: 16,
-                        }
-                    },
+                    // set_title: "System",
+                    
+                    adw::SwitchRow {
+                        set_title: "Always Show Accessibility Menu",
+                        set_subtitle: "Display the accessibility menu in the top bar"
+                    }
                 },
+
+                adw::PreferencesGroup {
+                    // set_title: "Devices",
+
+                    adw::ActionRow {
+                        set_title: "Seeing",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("org.gnome.Settings-accessibility-seeing-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Hearing",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("org.gnome.Settings-accessibility-hearing-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Typing",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("org.gnome.Settings-accessibility-typing-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Pointing and Clicking",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("org.gnome.Settings-accessibility-pointing-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+
+                    adw::ActionRow {
+                        set_title: "Zoom",
+                        set_activatable: true,
+
+                        add_prefix = &gtk::Image {
+                            set_icon_name: Some("oorg.gnome.Settings-accessibility-zoom-symbolic"),
+                            set_pixel_size: 16
+                        },
+
+                        add_suffix = &gtk::Image {
+                            set_icon_name: Some("go-next-symbolic"),
+                            set_pixel_size: 16,
+                        }
+                    },
+                }
+
             }
         }
     }

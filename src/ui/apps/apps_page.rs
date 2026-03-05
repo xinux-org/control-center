@@ -27,45 +27,48 @@ impl SimpleComponent for AppModal {
 
     view! {
         #[name = "navigation"]
-        adw::NavigationView{
-            add = &adw::NavigationPage{
-        adw::ToolbarView {
-            set_top_bar_style: adw::ToolbarStyle::Flat,
+        adw::NavigationView {
+            add = &adw::NavigationPage {
 
-            add_top_bar = &adw::HeaderBar {
-                #[wrap(Some)]
-                set_title_widget = &adw::WindowTitle{
-                    set_title: "Apps"
+            adw::ToolbarView {
+                set_top_bar_style: adw::ToolbarStyle::Flat,
+
+                add_top_bar = &adw::HeaderBar {
+                    #[wrap(Some)]
+                    set_title_widget = &adw::WindowTitle {
+                        set_title: "Apps"
+                    }
+                },
+                adw::PreferencesPage {
+                    adw::PreferencesGroup {
+                        set_width_request: 300,
+
+                        gtk::SearchEntry {
+                            set_placeholder_text: Some("Search apps"),
+                        },
+                    },
+
+                    adw::PreferencesGroup {
+                        adw::ActionRow {
+                            set_title: "Default Apps",
+                            set_activatable: true,
+                            set_subtitle: "Set which apps open links, files, and media",
+
+                            connect_activated => AppsMsg::OpenDefaultApps,
+
+                            add_suffix = &gtk::Button {
+                                set_icon_name: "go-next",
+                                add_css_class: "flat",
+
+                                set_valign: gtk::Align::Center,
+
+                            }
+                        },
+                    },
                 }
-            },
-            adw::PreferencesPage {
-                adw::PreferencesGroup {
-                    set_width_request: 300,
-
-                    gtk::SearchEntry {
-                        set_placeholder_text: Some("Search apps"),
-                    },
-                },
-
-                adw::PreferencesGroup {
-                    adw::ActionRow {
-                        set_title: "Default Apps",
-                        set_activatable: true,
-                        set_subtitle: "Set which apps open links, files, and media",
-
-                        connect_activated => AppsMsg::OpenDefaultApps,
-
-                        add_suffix = &gtk::Button {
-                            set_icon_name: "go-next",
-                            add_css_class: "flat",
-
-                            set_valign: gtk::Align::Center,
-
-                        }
-                    },
-                },
             }
-        }}}
+        }
+    }
 
     }
 

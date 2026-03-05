@@ -1,5 +1,5 @@
 project(
-  'control-center',
+  'settings',
   'rust',
   version: '0.1.0',
   meson_version: '>= 0.59',

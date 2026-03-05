@@ -1,5 +1,5 @@
 [package]
-name = "control-center"
+name = "settings"
 version = "0.1.0"
 edition = "2024"
 license = "GPL-2.0"
@@ -23,3 +23,6 @@ tracker = "0.2.2"
 notify = { version = "8.1.0", features = ["serde"] }
 glib = "0.21.5"
 regex = "1.12.3"
+# system infos
+sysinfo = "0.38.3"
+wgpu = "27.0.1"
