@@ -111,7 +111,6 @@ impl fmt::Display for PowerMode {
 pub enum GeneralPowerPageViewMsg {
     SetPowerMode(PowerMode),
     ToggleBatteryPercentage(bool),
-    ChangeBattery,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -325,19 +324,6 @@ impl Component for GeneralPowerPageView {
             }
             GeneralPowerPageViewMsg::ToggleBatteryPercentage(state) => {
                 self.show_battery_percentage = state;
-            }
-            GeneralPowerPageViewMsg::ChangeBattery => {
-                self.battery_percentage = read_file("capacity", String::from("No battery"))
-                    .first()
-                    .unwrap()
-                    .to_string();
-                // It's a quick solution, will be fixed later
-                self.battery_percentage_float = *get_battery_percentages_float(read_file(
-                    "capacity",
-                    String::from("No battery"),
-                ))
-                .first()
-                .unwrap_or(&0.0)
             }
         }
     }
