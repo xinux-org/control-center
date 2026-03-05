@@ -11,7 +11,6 @@ let
 
   commonBuildInputs = with pkgs; [
     gtk4
-    glib
     gnome-desktop
     libadwaita
     openssl
