@@ -2,7 +2,7 @@ use crate::app::AppMsg;
 use nmrs::{NetworkManager, WifiSecurity};
 use relm4::adw::prelude::*;
 use relm4::factory::FactoryVecDeque;
-use relm4::gtk;
+use relm4::gtk::{self, glib::{self}};
 use relm4::prelude::*;
 
 #[derive(Debug, Clone)]
