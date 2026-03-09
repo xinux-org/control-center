@@ -65,6 +65,21 @@ configure_file(
   install_dir: datadir / 'glib-2.0' / 'schemas'
 )
 
+# Policy file
+dataconf = configuration_data()
+dataconf.set('pkglibexecdir', libexecdir)
+i18n.merge_file(
+  input: configure_file(
+    configuration: dataconf,
+    input: '@0@.policy.in.in'.format(base_id),
+    output: '@BASENAME@',
+  ),
+  output: '@0@.policy'.format(base_id),
+  po_dir: podir,
+  install: true,
+  install_dir: datadir / 'polkit-1' / 'actions',
+)
+
 # Validata GSchema
 test(
   'validate-gschema', glib_compile_schemas,

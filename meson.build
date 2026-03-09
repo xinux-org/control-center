@@ -26,6 +26,7 @@ version = meson.project_version()
 prefix = get_option('prefix')
 bindir = prefix / get_option('bindir')
 localedir = prefix / get_option('localedir')
+libexecdir = prefix / get_option('libexecdir')
 
 datadir = prefix / get_option('datadir')
 pkgdatadir = datadir / meson.project_name()
@@ -63,6 +64,8 @@ endif
 subdir('data')
 subdir('po')
 subdir('src')
+subdir('s-helper/src')
+
 
 gnome.post_install(
   gtk_update_icon_cache: true,
