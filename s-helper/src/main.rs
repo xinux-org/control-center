@@ -63,9 +63,8 @@ enum SubCommands {
 }
 
 fn main() {
-    let cli = SubCommands::augment_subcommands(clap::Command::new(
-        "Helper binary for Xinux Settings",
-    ));
+    let cli =
+        SubCommands::augment_subcommands(clap::Command::new("Helper binary for Xinux Settings"));
     let matches = cli.get_matches();
     let derived_subcommands = SubCommands::from_arg_matches(&matches)
         .map_err(|err| err.exit())
@@ -88,11 +87,11 @@ fn main() {
                     Ok(_) => {}
                     Err(err) => {
                         eprintln!("{}", err);
-                        if let Ok(o) = old {
-                            if fs::write(&output, o).is_err() {
-                                eprintln!("Could not restore old file");
-                            }
-                        }
+                        if let Ok(o) = old
+                            && fs::write(&output, o).is_err()
+                        {
+                            eprintln!("Could not restore old file");
+                        };
                         std::process::exit(1);
                     }
                 },
@@ -119,12 +118,11 @@ fn main() {
             generations,
             arguments,
         } => {
-            if update {
-                if let Err(e) = write_file(&output) {
-                    eprintln!("{}", e);
-                    std::process::exit(1);
-                }
+            if update && let Err(e) = write_file(&output) {
+                eprintln!("{}", e);
+                std::process::exit(1);
             }
+
             match channel() {
                 Ok(_) => {
                     if dorebuild {
@@ -151,12 +149,11 @@ fn main() {
             generations,
             arguments,
         } => {
-            if update {
-                if let Err(e) = write_file(&output) {
-                    eprintln!("{}", e);
-                    std::process::exit(1);
-                }
+            if update && let Err(e) = write_file(&output) {
+                eprintln!("{}", e);
+                std::process::exit(1);
             }
+
             match flake(&flakepath) {
                 Ok(_) => {
                     if dorebuild {
@@ -192,32 +189,29 @@ fn rebuild(args: Vec<String>, generations: Option<u32>) -> Result<(), Box<dyn Er
     let x = cmd.wait()?;
     if !x.success() {
         eprintln!("nixos-rebuild failed with exit code {}", x.code().unwrap());
-        return Err(Box::new(io::Error::new(
-            io::ErrorKind::Other,
-            "nixos-rebuild failed",
-        )));
+        return Err(Box::new(std::io::Error::other("nixos-rebuild failed")));
     }
-    if let Some(g) = generations {
-        if g > 0 {
-            let mut cmd = Command::new("nix-env")
-                .arg("--delete-generations")
-                .arg("-p")
-                .arg("/nix/var/nix/profiles/system")
-                .arg(&format!("+{}", g))
-                .spawn()?;
-            let x = cmd.wait()?;
-            if !x.success() {
-                eprintln!(
-                    "nix-env --delete-generations failed with exit code {}",
-                    x.code().unwrap()
-                );
-                return Err(Box::new(io::Error::new(
-                    io::ErrorKind::Other,
-                    "nix-env failed",
-                )));
-            }
+
+    if let Some(g) = generations
+        && g > 0
+    {
+        let mut cmd = Command::new("nix-env")
+            .arg("--delete-generations")
+            .arg("-p")
+            .arg("/nix/var/nix/profiles/system")
+            .arg(format!("+{}", g))
+            .spawn()?;
+        let x = cmd.wait()?;
+        if !x.success() {
+            eprintln!(
+                "nix-env --delete-generations failed with exit code {}",
+                x.code().unwrap()
+            );
+
+            return Err(Box::new(std::io::Error::other("nix-env failed")));
         }
     }
+
     Ok(())
 }
 
@@ -228,10 +222,8 @@ fn channel() -> Result<(), Box<dyn Error>> {
         Ok(())
     } else {
         eprintln!("nix-channel failed with exit code {}", x.code().unwrap());
-        Err(Box::new(io::Error::new(
-            io::ErrorKind::Other,
-            "nix-channel failed",
-        )))
+
+        Err(Box::new(std::io::Error::other("nix-channel failed")))
     }
 }
 
@@ -247,9 +239,7 @@ fn flake(path: &str) -> Result<(), Box<dyn Error>> {
         Ok(())
     } else {
         eprintln!("nix flake failed with exit code {}", x.code().unwrap());
-        Err(Box::new(io::Error::new(
-            io::ErrorKind::Other,
-            "nix flake failed",
-        )))
+
+        Err(Box::new(std::io::Error::other("nix flake failed")))
     }
 }
