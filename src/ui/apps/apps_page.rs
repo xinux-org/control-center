@@ -6,14 +6,12 @@ use relm4::prelude::*;
 
 use crate::ui::apps::default_apps::DefaultAppsPage;
 
-// First page modal
 #[derive(Debug)]
 pub struct AppModal {
     navigation: adw::NavigationView,
     default_apps: Controller<DefaultAppsPage>,
 }
 
-// First page message
 #[derive(Debug)]
 pub enum AppsMsg {
     OpenDefaultApps,

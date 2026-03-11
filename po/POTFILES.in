@@ -1,6 +1,6 @@
-data/net.bleur.GtkRustTemplate.desktop.in.in
-data/net.bleur.GtkRustTemplate.gschema.xml.in
-data/net.bleur.GtkRustTemplate.metainfo.xml.in.in
+data/uz.xinux.Settings.desktop.in.in
+data/uz.xinux.Settings.gschema.xml.in
+data/uz.xinux.Settings.metainfo.xml.in.in
 data/resources/ui/shortcuts.ui
 src/app.rs
 src/main.rs
