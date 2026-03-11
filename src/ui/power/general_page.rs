@@ -87,9 +87,6 @@ pub struct GeneralPowerPageView {
     pub power_mode: PowerMode,
     pub show_battery_percentage: bool,
 
-    pub battery_percentage: String,
-    pub battery_status: String,
-    pub battery_percentage_float: f64,
     #[tracker::do_not_track]
     batteries: FactoryVecDeque<BatteryModel>,
     #[tracker::do_not_track]
@@ -287,23 +284,7 @@ impl Component for GeneralPowerPageView {
             power_mode: get_current_profile(&proxy),
             show_battery_percentage: false,
 
-            // .unwrap() calls should be fixed ASAP!!
             ppd: Arc::new(proxy),
-            battery_percentage: read_file("capacity", String::from("No battery"))
-                .first()
-                .unwrap_or(&String::from("No battery"))
-                .to_string(),
-            battery_status: read_file("status", String::from(""))
-                .first()
-                .unwrap_or(&String::from(""))
-                .to_string(),
-            battery_percentage_float: *get_battery_percentages_float(read_file(
-                "capacity",
-                String::from("No battery"),
-            ))
-            .get(1)
-            .unwrap_or(&0.0),
-
             tracker: 0,
         };
 
