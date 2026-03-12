@@ -1,4 +1,4 @@
-use crate::app::AppMsg;
+use crate::ui::window::AppMsg;
 use crate::ui::apps::default_apps::DefaultAppsPage;
 use relm4::adw;
 use relm4::adw::prelude::*;
