@@ -14,17 +14,17 @@ let
     gnome-desktop
     libadwaita
     openssl
-    gtksourceview5
-    polkit
   ];
 
   commonNativeBuildInputs = with pkgs; [
     appstream
+    appstream-glib
     desktop-file-utils
     gettext
     meson
     ninja
     pkg-config
+    polkit
     wrapGAppsHook4
   ];
 

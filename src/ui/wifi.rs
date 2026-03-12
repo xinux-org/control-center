@@ -1,4 +1,4 @@
-use crate::app::AppMsg;
+use crate::ui::window::AppMsg;
 use nmrs::{NetworkManager, WifiSecurity};
 use relm4::adw::prelude::*;
 use relm4::factory::FactoryVecDeque;

@@ -1,6 +1,6 @@
 use std::convert::identity;
 
-use crate::app::AppMsg;
+use crate::ui::window::AppMsg;
 use crate::ui::system::system_about::SystemAboutPage;
 use crate::ui::system::system_l10n::SystemRegionLanguagePage;
 use relm4::adw::prelude::*;

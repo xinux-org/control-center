@@ -20,7 +20,7 @@ use crate::ui::search::SearchModal;
 
 use std::convert::identity;
 
-pub(super) struct App {
+pub struct App {
     _wifi: Controller<WifiModel>,
     _network: Controller<NetworkModel>,
     _bluetooth: Controller<BluetoothModel>,
@@ -79,7 +79,7 @@ impl SimpleComponent for App {
 
             #[wrap(Some)]
             set_help_overlay: shortcuts = &gtk::Builder::from_resource(
-                    "/net/bleur/GtkRustTemplate/gtk/help-overlay.ui"
+                    "/uz/xinux/Settings/gtk/help-overlay.ui"
                 )
                 .object::<gtk::ShortcutsWindow>("help_overlay")
                 .unwrap() -> gtk::ShortcutsWindow {

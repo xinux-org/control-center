@@ -1,6 +1,5 @@
 #[rustfmt::skip]
 mod config;
-mod app;
 mod ui;
 mod utils;
 
@@ -14,7 +13,7 @@ use relm4::{
     gtk, main_application,
 };
 
-use app::App;
+use crate::ui::window::App;
 
 relm4::new_action_group!(AppActionGroup, "app");
 relm4::new_stateless_action!(QuitAction, AppActionGroup, "quit");
@@ -33,7 +32,7 @@ fn main() {
     gettextrs::bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR).expect("Unable to bind the text domain");
     gettextrs::textdomain(GETTEXT_PACKAGE).expect("Unable to switch to the text domain");
 
-    glib::set_application_name(&gettext("GTK Rust Template"));
+    glib::set_application_name(&gettext("Xinux settings"));
 
     let res = gio::Resource::load(RESOURCES_FILE).expect("Could not load gresource file");
     gio::resources_register(&res);
@@ -41,7 +40,7 @@ fn main() {
     gtk::Window::set_default_icon_name(APP_ID);
 
     let app = main_application();
-    app.set_resource_base_path(Some("/net/bleur/GtkRustTemplate/"));
+    app.set_resource_base_path(Some("/uz/xinux/Settings/"));
 
     let mut actions = RelmActionGroup::<AppActionGroup>::new();
 
@@ -60,7 +59,7 @@ fn main() {
 
     let data = res
         .lookup_data(
-            "/net/bleur/GtkRustTemplate/style.css",
+            "/uz/xinux/Settings/style.css",
             gio::ResourceLookupFlags::NONE,
         )
         .unwrap();
