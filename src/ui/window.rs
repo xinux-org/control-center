@@ -1,12 +1,13 @@
-use crate::RelmActionGroup;
-use relm4::*;
+use anyhow::Context;
+use nix_data::config::configfile::NixDataConfig;
+use relm4::{
+    actions::{RelmAction, RelmActionGroup},
+    adw::{self, prelude::*},
+    gtk::{gio, glib},
+    *,
+};
 
-use relm4::actions::RelmAction;
-
-use adw::prelude::*;
-use gtk::{gio, glib};
-
-use crate::config::{APP_ID, PROFILE};
+use crate::ui::search::SearchModal;
 use crate::ui::{
     about::AboutDialog, accessibility::AccessibilityModel, accounts::AccountsModel,
     bluetooth::BluetoothModel, display::DisplayModel, mouse::MouseAndTouchpad,
@@ -14,11 +15,17 @@ use crate::ui::{
     power::PowerModel, privacyandsecurity::PrivacyAndSecurityModel, sharing::SharingModel,
     sound::SoundModel, system::SystemPageModel, wellbeing::WellbeingModel, wifi::WifiModel,
 };
+use crate::ui::{apps::AppModal, load::reload, rebuild::rebuild_dialog::RebuildInput};
+use crate::{
+    config::{APP_ID, PROFILE},
+    ui::rebuild::rebuild_dialog::{RebuildInit, RebuildModel},
+};
+use crate::{
+    ui::load::{LoadOutput, ReloadOutput},
+    utils::modules::ModuleOption,
+};
 
-use crate::ui::apps::AppModal;
-use crate::ui::search::SearchModal;
-
-use std::convert::identity;
+use std::{collections::HashMap, convert::identity, fs, path::Path};
 
 pub struct App {
     _wifi: Controller<WifiModel>,
@@ -38,10 +45,24 @@ pub struct App {
     _accessibility: Controller<AccessibilityModel>,
     _privacyandsecurity: Controller<PrivacyAndSecurityModel>,
     _system: Controller<SystemPageModel>,
+
+    config: NixDataConfig,
+    rebuild_dialog: Controller<RebuildModel>,
+    // error_dialog: Controller<ErrorDialogModel>,
+    moduleconfig: String,
+
+    current_config: HashMap<String, ModuleOption>,
+    modified_config: HashMap<String, ModuleOption>,
+}
+
+pub struct AppInit {
+    pub load: LoadOutput,
 }
 
 #[derive(Debug)]
 pub enum AppMsg {
+    Rebuild(String, String, String), // single line nix path, argument and value
+    Reload,
     Quit,
 }
 
@@ -52,7 +73,7 @@ relm4::new_stateless_action!(AboutAction, WindowActionGroup, "about");
 
 #[relm4::component(pub)]
 impl SimpleComponent for App {
-    type Init = ();
+    type Init = AppInit;
     type Input = AppMsg;
     type Output = ();
     type Widgets = AppWidgets;
@@ -77,15 +98,15 @@ impl SimpleComponent for App {
                 glib::Propagation::Stop
             },
 
-            #[wrap(Some)]
-            set_help_overlay: shortcuts = &gtk::Builder::from_resource(
-                    "/uz/xinux/Settings/gtk/help-overlay.ui"
-                )
-                .object::<gtk::ShortcutsWindow>("help_overlay")
-                .unwrap() -> gtk::ShortcutsWindow {
-                    set_transient_for: Some(&main_window),
-                    set_application: Some(&main_application()),
-            },
+            // #[wrap(Some)]
+            // set_help_overlay: shortcuts = &gtk::Builder::from_resource(
+            //         "/uz/xinux/Settings/gtk/help-overlay.ui"
+            //     )
+            //     .object::<gtk::ShortcutsWindow>("help_overlay")
+            //     .unwrap() -> gtk::ShortcutsWindow {
+            //         set_transient_for: Some(&main_window),
+            //         set_application: Some(&main_application()),
+            // },
 
             add_css_class?: if PROFILE == "Devel" {
                     Some("devel")
@@ -167,10 +188,19 @@ impl SimpleComponent for App {
     }
 
     fn init(
-        _init: Self::Init,
+        init: Self::Init,
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        let LoadOutput {
+            config,
+            moduleconfig,
+            modulepath,
+            flakepath,
+            modules,
+            current_config,
+        } = init.load;
+
         let wifi = WifiModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
@@ -223,6 +253,15 @@ impl SimpleComponent for App {
             .launch(())
             .forward(sender.input_sender(), identity);
 
+        let rebuild_dialog = RebuildModel::builder()
+            .transient_for(&root)
+            .launch(RebuildInit {
+                flakepath,
+                modulepath,
+                generations: config.generations,
+            })
+            .forward(sender.input_sender(), identity);
+
         let widgets = view_output!();
 
         let model = App {
@@ -243,6 +282,12 @@ impl SimpleComponent for App {
             _accessibility: accessibility,
             _privacyandsecurity: privacyandsecurity,
             _system: system,
+
+            config,
+            moduleconfig,
+            rebuild_dialog,
+            current_config,
+            modified_config: HashMap::new(),
         };
 
         widgets.stack.connect_visible_child_notify({
@@ -254,12 +299,12 @@ impl SimpleComponent for App {
 
         let mut actions = RelmActionGroup::<WindowActionGroup>::new();
 
-        let shortcuts_action = {
-            let shortcuts = widgets.shortcuts.clone();
-            RelmAction::<ShortcutsAction>::new_stateless(move |_| {
-                shortcuts.present();
-            })
-        };
+        // let shortcuts_action = {
+        //     let shortcuts = widgets.shortcuts.clone();
+        //     RelmAction::<ShortcutsAction>::new_stateless(move |_| {
+        //         shortcuts.present();
+        //     })
+        // };
 
         let about_action = {
             RelmAction::<AboutAction>::new_stateless(move |_| {
@@ -267,7 +312,7 @@ impl SimpleComponent for App {
             })
         };
 
-        actions.add_action(shortcuts_action);
+        // actions.add_action(shortcuts_action);
         actions.add_action(about_action);
         actions.register_for_widget(&widgets.main_window);
 
@@ -278,6 +323,55 @@ impl SimpleComponent for App {
 
     fn update(&mut self, message: Self::Input, _sender: ComponentSender<Self>) {
         match message {
+            AppMsg::Rebuild(relative_config_path, argument, value) => {
+                // path to be written arg and val usually inside ./modules/nixos/. not configuration.nix
+                let full_config_path = Path::new(&self.config.flake.clone().unwrap())
+                    .parent()
+                    .context("systemconfig parent")
+                    .unwrap()
+                    .join(relative_config_path);
+
+                // String type readed file. e.x: {}, "{...}:\n{\n  i18n.defaultLocale..
+                let full_config_string = fs::read_to_string(&full_config_path)
+                    .context("String type readed file")
+                    .unwrap();
+
+                // new changed file to be written in s-helper and saved/overwritten
+                let output = nixpkgs_fmt::reformat_string(
+                    &nix_editor::write::write(
+                        &full_config_string,
+                        &argument,
+                        &format!("\"{}\"", value),
+                    )
+                    .unwrap(),
+                );
+
+                self.rebuild_dialog.emit(RebuildInput::Rebuild(
+                    self.modified_config.clone(),
+                    output.to_owned(),
+                    full_config_path.into_os_string().into_string().unwrap(),
+                ))
+            }
+            AppMsg::Reload => match reload(&self.config) {
+                Ok(ReloadOutput {
+                    modules,
+                    current_config,
+                    moduleconfig,
+                }) => {
+                    self.current_config = current_config;
+                    self.moduleconfig = moduleconfig;
+                    self.modified_config.clear();
+
+                    // self.main_leaflet.set_visible_child(&self.main_box);
+                    // self.modulepage.emit(ModulePageInput::ShowApply(false));
+                }
+                Err(e) => {
+                    // self.error_dialog.emit(ErrorDialogInput::Show(
+                    //     "Failed to reload current module configuration".to_string(),
+                    //     e.to_string(),
+                    // ));
+                }
+            },
             AppMsg::Quit => main_application().quit(),
         }
     }

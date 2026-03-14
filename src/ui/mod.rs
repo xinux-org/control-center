@@ -19,6 +19,8 @@ pub mod wellbeing;
 pub mod mouse;
 
 pub mod accessibility;
+pub mod load;
 pub mod privacyandsecurity;
+pub mod rebuild;
 pub mod system;
 pub mod window;
