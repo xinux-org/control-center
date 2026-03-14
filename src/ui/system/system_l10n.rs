@@ -240,7 +240,7 @@ impl SimpleComponent for LanguageModel {
         let mut model = LanguageModel {
             showall: false,
             selected: None,
-            rebuild_sensitive: true,
+            rebuild_sensitive: false,
             selectiongroup: gtk::CheckButton::new(),
             expanders: vec![],
             tracker: 0,
@@ -421,15 +421,9 @@ impl SimpleComponent for LanguageModel {
             }
             LanguageModelMsg::SetSelected(x) => {
                 info!("Selected language: {:?}", x);
-                if let Some(lang) = &x {
-                    self.rebuild_sensitive = false;
-                    // let _ = sender.output(AppMsg::SetCanGoForward(true));
-                    // let _ = sender.output(AppMsg::SetLanguageConfig(Some(lang.to_string())));
-                } else {
-                    self.selectiongroup.set_active(true);
-                    // let _ = sender.output(AppMsg::SetCanGoForward(false));
-                }
-                self.selected = x;
+                self.selectiongroup.set_active(!x.is_some());
+                self.set_rebuild_sensitive(x.is_some());
+                self.set_selected(x);
             }
             LanguageModelMsg::CheckSelected => {
                 trace!(
@@ -443,7 +437,6 @@ impl SimpleComponent for LanguageModel {
                         val.to_string(),
                     ));
                 }
-                // let _ = sender.output(AppMsg::SetCanGoForward(self.selected.is_some()));
             }
             LanguageModelMsg::Rebuild(relative_config_path, argument, value) => {
                 let _a = sender.output(SystemRegionLanguageMsg::Rebuild(
