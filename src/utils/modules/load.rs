@@ -7,7 +7,7 @@ use std::{
 };
 use tracing::log::debug;
 
-use crate::modules::{ModuleData, OptionType};
+use crate::utils::modules::{ModuleData, OptionType};
 
 use super::{Module, ModuleOption};
 

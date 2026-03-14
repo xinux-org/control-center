@@ -21,8 +21,8 @@ use crate::{
     ui::rebuild::rebuild_dialog::{RebuildInit, RebuildModel},
 };
 use crate::{
-    modules::ModuleOption,
     ui::load::{LoadOutput, ReloadOutput},
+    utils::modules::ModuleOption,
 };
 
 use std::{collections::HashMap, convert::identity, fs, path::Path};

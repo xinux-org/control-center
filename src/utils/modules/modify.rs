@@ -1,6 +1,6 @@
 use std::fs;
 
-use crate::{MODULES_CONFIG, modules::OptionType};
+use crate::{MODULES_CONFIG, utils::modules::OptionType};
 
 use super::{Module, OptionData};
 use anyhow::{Result, Context};

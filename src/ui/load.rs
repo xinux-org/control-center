@@ -1,4 +1,4 @@
-use crate::modules::{
+use crate::utils::modules::{
     Module, ModuleOption,
     load::{self, getcurrentoptions, getmodulepath, loadmoduleconfig},
 };

@@ -1,6 +1,5 @@
-use crate::modules::ModuleOption;
-use crate::modules::load::loadanyconfig;
 use crate::ui::rebuild::utils::gt_status_msg;
+use crate::utils::modules::ModuleOption;
 use crate::{config::LIBEXECDIR, ui::window::AppMsg};
 use relm4::{
     ComponentParts, ComponentSender, SimpleComponent,
@@ -10,7 +9,6 @@ use relm4::{
         prelude::{ButtonExt, GtkWindowExt, OrientableExt, WidgetExt},
     },
 };
-use std::path::Path;
 use std::{collections::HashMap, path::PathBuf};
 use tracing::{info, warn};
 use vte::{TerminalExt, TerminalExtManual};
