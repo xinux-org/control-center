@@ -98,15 +98,15 @@ impl SimpleComponent for App {
                 glib::Propagation::Stop
             },
 
-            #[wrap(Some)]
-            set_help_overlay: shortcuts = &gtk::Builder::from_resource(
-                    "/uz/xinux/Settings/gtk/help-overlay.ui"
-                )
-                .object::<gtk::ShortcutsWindow>("help_overlay")
-                .unwrap() -> gtk::ShortcutsWindow {
-                    set_transient_for: Some(&main_window),
-                    set_application: Some(&main_application()),
-            },
+            // #[wrap(Some)]
+            // set_help_overlay: shortcuts = &gtk::Builder::from_resource(
+            //         "/uz/xinux/Settings/gtk/help-overlay.ui"
+            //     )
+            //     .object::<gtk::ShortcutsWindow>("help_overlay")
+            //     .unwrap() -> gtk::ShortcutsWindow {
+            //         set_transient_for: Some(&main_window),
+            //         set_application: Some(&main_application()),
+            // },
 
             add_css_class?: if PROFILE == "Devel" {
                     Some("devel")
@@ -299,12 +299,12 @@ impl SimpleComponent for App {
 
         let mut actions = RelmActionGroup::<WindowActionGroup>::new();
 
-        let shortcuts_action = {
-            let shortcuts = widgets.shortcuts.clone();
-            RelmAction::<ShortcutsAction>::new_stateless(move |_| {
-                shortcuts.present();
-            })
-        };
+        // let shortcuts_action = {
+        //     let shortcuts = widgets.shortcuts.clone();
+        //     RelmAction::<ShortcutsAction>::new_stateless(move |_| {
+        //         shortcuts.present();
+        //     })
+        // };
 
         let about_action = {
             RelmAction::<AboutAction>::new_stateless(move |_| {
@@ -312,7 +312,7 @@ impl SimpleComponent for App {
             })
         };
 
-        actions.add_action(shortcuts_action);
+        // actions.add_action(shortcuts_action);
         actions.add_action(about_action);
         actions.register_for_widget(&widgets.main_window);
 

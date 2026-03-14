@@ -1,26 +1,27 @@
-use crate::utils::language::get_languages;
 use std::convert::identity;
-
-use gettextrs::gettext;
-use relm4::adw::prelude::*;
-use relm4::gtk::{self};
-use relm4::prelude::*;
-use relm4::{adw, view};
 use tracing::{info, trace};
 
 use crate::ui::system::system_page::SystemPageMsg;
+use crate::utils::language::get_languages;
+use gettextrs::gettext;
+use relm4::{
+    adw::{self, prelude::*},
+    gtk::{self},
+    prelude::*,
+    view,
+};
 
-// Second page modal
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct SystemRegionLanguagePage {
-    language_dialog: Option<Controller<LanguageModel>>,
+    language_dialog: Controller<LanguageModel>,
 }
 
-// Second page message
 #[derive(Debug)]
 pub enum SystemRegionLanguageMsg {
     ShowLanguageDialog,
-    Rebuild(String, String, String), // single line nix path, argument and value
+    // single line nix path, argument and value
+    Rebuild(String, String, String),
+    Close,
 }
 
 #[relm4::component(pub)]
@@ -86,11 +87,15 @@ impl SimpleComponent for SystemRegionLanguagePage {
 
     fn init(
         _init: Self::Init,
-        _root: Self::Root,
-        _sender: ComponentSender<Self>,
+        root: Self::Root,
+        sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
+        let dialog = LanguageModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
+
         let model = SystemRegionLanguagePage {
-            language_dialog: None,
+            language_dialog: dialog,
         };
 
         let widgets = view_output!();
@@ -100,16 +105,9 @@ impl SimpleComponent for SystemRegionLanguagePage {
     fn update(&mut self, message: Self::Input, sender: ComponentSender<Self>) {
         match message {
             SystemRegionLanguageMsg::ShowLanguageDialog => {
-                let dialog = LanguageModel::builder()
-                    .launch(())
-                    .forward(sender.input_sender(), identity);
-
-                dialog
+                self.language_dialog
                     .widget()
                     .present(relm4::main_application().active_window().as_ref());
-
-                // Save the controller so it isn't dropped!
-                self.language_dialog = Some(dialog);
             }
             SystemRegionLanguageMsg::Rebuild(relative_config_path, argument, value) => {
                 let _a = sender.output(SystemPageMsg::Rebuild(
@@ -117,6 +115,10 @@ impl SimpleComponent for SystemRegionLanguagePage {
                     argument,
                     value,
                 ));
+                sender.input(SystemRegionLanguageMsg::Close);
+            }
+            SystemRegionLanguageMsg::Close => {
+                self.language_dialog.widget().close();
             }
         }
     }
@@ -148,6 +150,7 @@ impl SimpleComponent for LanguageModel {
     type Output = SystemRegionLanguageMsg;
 
     view! {
+        // todo: replase this with adw::Window to remove x button
         dialog = adw::Dialog {
             set_title: &gettext("Select language"),
             set_content_width: 450,
@@ -162,9 +165,12 @@ impl SimpleComponent for LanguageModel {
                         set_label: &gettext("Cancel"),
                         #[watch]
                         set_visible: true,
+
+                        connect_clicked[dialog] => move |_| {
+                            dialog.close();
+                        }
                     },
 
-                    // #[name(rebuild_button)]
                     pack_end = &gtk::Button {
                         set_label: &gettext("Apply"),
                         add_css_class: "suggested-action",
@@ -233,7 +239,7 @@ impl SimpleComponent for LanguageModel {
     }
 
     fn init(
-        init: Self::Init,
+        _init: Self::Init,
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
@@ -402,8 +408,6 @@ impl SimpleComponent for LanguageModel {
 
         let widgets = view_output!();
         widgets.langstack.set_vhomogeneous(false);
-        let window = relm4::main_application().active_window();
-        root.present(window.as_ref());
 
         ComponentParts { model, widgets }
     }
