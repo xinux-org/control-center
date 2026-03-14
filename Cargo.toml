@@ -19,13 +19,9 @@ anyhow = "1.0.102"
 # Optimize release binary as much as possible
 [profile.release]
 lto = true
-codegen-units = 1
-incremental = true
-strip = true
 opt-level = "z"
 
 [profile.dev]
-opt-level = 1
 lto = "thin"
 
 [profile.dev.package."*"]

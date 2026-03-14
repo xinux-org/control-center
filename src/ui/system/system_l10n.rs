@@ -128,6 +128,7 @@ impl SimpleComponent for SystemRegionLanguagePage {
 pub struct LanguageModel {
     showall: bool,
     selected: Option<String>,
+    rebuild_sensitive: bool,
     selectiongroup: gtk::CheckButton,
     expanders: Vec<adw::ExpanderRow>,
 }
@@ -147,93 +148,89 @@ impl SimpleComponent for LanguageModel {
     type Output = SystemRegionLanguageMsg;
 
     view! {
-            dialog = adw::Dialog {
-                set_title: &gettext("Select language"),
-                set_content_width: 450,
-                set_content_height: 450,
-                // set_hexpand: true,
-                set_vexpand: true,
+        dialog = adw::Dialog {
+            set_title: &gettext("Select language"),
+            set_content_width: 450,
+            set_content_height: 450,
+            // set_hexpand: true,
+            set_vexpand: true,
 
-                #[wrap(Some)]
-                set_child = &adw::ToolbarView {
-                    add_top_bar = &adw::HeaderBar {
-                        pack_start = &gtk::Button {
-                            set_label: &gettext("Cancel"),
-                            #[watch]
-                            set_visible: true,
-                        },
-
-                        pack_end = &gtk::Button {
-                            set_label: &gettext("Apply"),
-                            add_css_class: "suggested-action",
-                            #[watch]
-                            set_visible: true,
-
-                            connect_clicked[sender, model] => move |_| {
-                                if let Some(val) = &model.selected {
-                                    println!("slected language: {val:?}");
-                                    sender.input(LanguageModelMsg::Rebuild(
-                                        "modules/nixos/l10n/default.nix".to_string(),
-                                        "i18n.defaultLocale".to_string(),
-                                        val.to_string()
-                                    ));
-                                }
-                            }
-                        },
+            #[wrap(Some)]
+            set_child = &adw::ToolbarView {
+                add_top_bar = &adw::HeaderBar {
+                    pack_start = &gtk::Button {
+                        set_label: &gettext("Cancel"),
+                        #[watch]
+                        set_visible: true,
                     },
 
-                    #[wrap(Some)]
-                    set_content = &gtk::ScrolledWindow {
-                        set_hexpand: true,
-                        set_vexpand: true,
-                        adw::Clamp {
-                            gtk::Box {
-                                set_hexpand: true,
-                                set_vexpand: true,
-                                set_valign: gtk::Align::Center,
-                                set_orientation: gtk::Orientation::Vertical,
-                                set_spacing: 20,
-                                set_margin_all: 20,
+                    // #[name(rebuild_button)]
+                    pack_end = &gtk::Button {
+                        set_label: &gettext("Apply"),
+                        add_css_class: "suggested-action",
+                        #[watch]
+                        set_visible: true,
+                        #[watch]
+                        set_sensitive: model.rebuild_sensitive,
 
-                                #[name(langstack)]
-                                if model.showall {
-                                    #[local_ref]
-                                    langbox -> gtk::ListBox {
-                                        add_css_class: "boxed-list",
-                                        set_selection_mode: gtk::SelectionMode::None,
-                                        connect_row_activated => move |_, row| {
-                                            let checkbutton = row.child().unwrap().downcast::<gtk::Box>().unwrap().last_child().unwrap().downcast::<gtk::CheckButton>().unwrap();
-                                            checkbutton.set_active(true);
-                                        },
-                                    }
-                                } else {
-                                    #[local_ref]
-                                    shortlangbox -> gtk::ListBox {
-                                        add_css_class: "boxed-list",
-                                        set_selection_mode: gtk::SelectionMode::None,
-                                        connect_row_activated => move |_, row| {
-                                            let checkbutton = row.child().unwrap().downcast::<gtk::Box>().unwrap().last_child().unwrap().downcast::<gtk::CheckButton>().unwrap();
-                                            checkbutton.set_active(true);
-                                        },
-                                    }
-                                },
-                                gtk::Button {
-                                    add_css_class: "pill",
-                                    set_halign: gtk::Align::Center,
-                                    #[watch]
-                                    set_label: &if model.showall { gettext("Show less") } else { gettext("Show all") },
-                                    connect_clicked[sender] => move |_| {
-                                        sender.input(LanguageModelMsg::ToggleShowall);
-                                        sender.input(LanguageModelMsg::SetSelected(None));
-                                    }
+                        connect_clicked[sender] => move |_| {
+                            sender.input(LanguageModelMsg::CheckSelected);
+                        }
+                    },
+                },
+
+                #[wrap(Some)]
+                set_content = &gtk::ScrolledWindow {
+                    set_hexpand: true,
+                    set_vexpand: true,
+                    adw::Clamp {
+                        gtk::Box {
+                            set_hexpand: true,
+                            set_vexpand: true,
+                            set_valign: gtk::Align::Center,
+                            set_orientation: gtk::Orientation::Vertical,
+                            set_spacing: 20,
+                            set_margin_all: 20,
+
+                            #[name(langstack)]
+                            if model.showall {
+                                #[local_ref]
+                                langbox -> gtk::ListBox {
+                                    add_css_class: "boxed-list",
+                                    set_selection_mode: gtk::SelectionMode::None,
+                                    connect_row_activated => move |_, row| {
+                                        let checkbutton = row.child().unwrap().downcast::<gtk::Box>().unwrap().last_child().unwrap().downcast::<gtk::CheckButton>().unwrap();
+                                        checkbutton.set_active(true);
+                                    },
                                 }
-
+                            } else {
+                                #[local_ref]
+                                shortlangbox -> gtk::ListBox {
+                                    add_css_class: "boxed-list",
+                                    set_selection_mode: gtk::SelectionMode::None,
+                                    connect_row_activated => move |_, row| {
+                                        let checkbutton = row.child().unwrap().downcast::<gtk::Box>().unwrap().last_child().unwrap().downcast::<gtk::CheckButton>().unwrap();
+                                        checkbutton.set_active(true);
+                                    },
+                                }
+                            },
+                            gtk::Button {
+                                add_css_class: "pill",
+                                set_halign: gtk::Align::Center,
+                                #[watch]
+                                set_label: &if model.showall { gettext("Show less") } else { gettext("Show all") },
+                                connect_clicked[sender] => move |_| {
+                                    sender.input(LanguageModelMsg::ToggleShowall);
+                                    sender.input(LanguageModelMsg::SetSelected(None));
+                                }
                             }
+
                         }
                     }
                 }
             }
         }
+    }
 
     fn init(
         init: Self::Init,
@@ -243,6 +240,7 @@ impl SimpleComponent for LanguageModel {
         let mut model = LanguageModel {
             showall: false,
             selected: None,
+            rebuild_sensitive: true,
             selectiongroup: gtk::CheckButton::new(),
             expanders: vec![],
             tracker: 0,
@@ -251,7 +249,7 @@ impl SimpleComponent for LanguageModel {
         // List of 6 popular languages
         let shortlangs = vec!["uz_UZ.UTF-8", "en_US.UTF-8", "ru_RU.UTF-8"];
 
-        let defaultlang = "uz_UZ.UTF-8/UTF-8";
+        let defaultlang = "uz_UZ.UTF-8";
         model.selected = Some(defaultlang.to_string());
 
         let langbox = gtk::ListBox::new();
@@ -424,6 +422,7 @@ impl SimpleComponent for LanguageModel {
             LanguageModelMsg::SetSelected(x) => {
                 info!("Selected language: {:?}", x);
                 if let Some(lang) = &x {
+                    self.rebuild_sensitive = false;
                     // let _ = sender.output(AppMsg::SetCanGoForward(true));
                     // let _ = sender.output(AppMsg::SetLanguageConfig(Some(lang.to_string())));
                 } else {
@@ -437,6 +436,13 @@ impl SimpleComponent for LanguageModel {
                     "LanguageModelMsg::CheckSelected {}",
                     self.selected.is_some()
                 );
+                if let Some(val) = &self.selected {
+                    sender.input(LanguageModelMsg::Rebuild(
+                        "modules/nixos/l10n/default.nix".to_string(),
+                        "i18n.defaultLocale".to_string(),
+                        val.to_string(),
+                    ));
+                }
                 // let _ = sender.output(AppMsg::SetCanGoForward(self.selected.is_some()));
             }
             LanguageModelMsg::Rebuild(relative_config_path, argument, value) => {
