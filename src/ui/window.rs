@@ -1,4 +1,5 @@
 use crate::RelmActionGroup;
+use crate::ui::appearance;
 use relm4::*;
 
 use relm4::actions::RelmAction;
@@ -13,6 +14,7 @@ use crate::ui::{
     multitasking::MultitaskingModel, network::NetworkModel, notifications::NotificationsModel,
     power::PowerModel, privacyandsecurity::PrivacyAndSecurityModel, sharing::SharingModel,
     sound::SoundModel, system::SystemPageModel, wellbeing::WellbeingModel, wifi::WifiModel,
+    appearance::AppearanceModel,
 };
 
 use crate::ui::apps::AppModal;
@@ -25,6 +27,7 @@ pub struct App {
     _network: Controller<NetworkModel>,
     _bluetooth: Controller<BluetoothModel>,
     _display: Controller<DisplayModel>,
+    _appearance: Controller<AppearanceModel>,
     _sound: Controller<SoundModel>,
     _power: Controller<PowerModel>,
     _multitasking: Controller<MultitaskingModel>,
@@ -148,6 +151,7 @@ impl SimpleComponent for App {
             add_titled: (network.widget(), Some("network"), "Network"),
             add_titled: (bluetooth.widget(), Some("bluetooth"), "Bluetooth"),
             add_titled: (display.widget(), Some("display"), "Display"),
+            add_titled: (appearance.widget(), Some("appearance"), "Appearance"),
             add_titled: (sound.widget(), Some("sound"), "Sound"),
             add_titled: (power.widget(), Some("power"), "Power"),
             // add_titled: (multitasking.widget(), Some("multitasking"), "Multitasking"),
@@ -181,6 +185,9 @@ impl SimpleComponent for App {
             .launch(())
             .forward(sender.input_sender(), identity);
         let display = DisplayModel::builder()
+            .launch(())
+            .forward(sender.input_sender(), identity);
+        let appearance = AppearanceModel::builder()
             .launch(())
             .forward(sender.input_sender(), identity);
         let sound = SoundModel::builder()
@@ -230,6 +237,7 @@ impl SimpleComponent for App {
             _network: network,
             _bluetooth: bluetooth,
             _display: display,
+            _appearance: appearance,
             _sound: sound,
             _power: power,
             _multitasking: multitasking,
