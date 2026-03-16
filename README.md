@@ -17,7 +17,7 @@ Rewritten version of GNOME Control Center for Xinux OS.
 
 ## Development
 
-Add nix-data to your flake.nix input and configuration.nix
+Add nix-data to your flake.nix input and configuration.nix. ~/.config/nix-data/ your config locations via json here
 flake.nix input
 ```nix
 nix-data = {
@@ -26,7 +26,7 @@ nix-data = {
 };
 ```
 
-Change these to yours in configuration.nix
+Change these to yours in configuration.nix.
 
 ```nix
 programs.nix-data = {
@@ -49,7 +49,8 @@ meson setup build # --reconfigure
 # build the project
 nix build . --show-trace
 
-./result/bin/control-center
+cd ..
+./settings/result/bin/settings
 
 # Optional. Generate translation words from /po/POTFILES.in if needed.
 cd ./po
