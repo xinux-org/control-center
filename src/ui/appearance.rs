@@ -3,6 +3,27 @@ use relm4::adw::prelude::*;
 use relm4::gtk;
 use relm4::prelude::*;
 
+// #[derive(Debug, Clone, Copy)]
+// pub struct BackgroundPreview {
+//     picture: std::path::Path,
+// }
+// impl BackgroundPreview {
+//     pub fn set_picture(&self, path: std::path::Path){
+//         self.picture = path;
+//     }
+
+// }
+
+// #[relm4::widget_template]
+// impl WidgetTemplate for BackgroundPreview {
+//     view! {
+//         gtk::Box {
+//             set_margin_all: 10,
+//             inline_css: format!("background-image: {}", &self.picture) ,
+//         }
+//     }
+// }
+
 #[derive(Debug, Clone, Copy)]
 pub struct AppearanceModel {}
 
@@ -48,21 +69,10 @@ impl SimpleComponent for AppearanceModel {
                                     set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
                                 },
 
-                                append = &gtk::Box {
-                                    set_orientation: gtk::Orientation::Horizontal,
-                                    set_halign: gtk::Align::Start,
-
-                                    append = &gtk::Box {
-                                        set_orientation: gtk::Orientation::Vertical,
-                                        set_hexpand: true,
-                                        set_halign: gtk::Align::Center,
-
-                                        append = &gtk::Label {
-                                            set_label: "Default",
-                                            set_halign: gtk::Align::Center,
-                                            set_hexpand: true,
-                                        },
-                                    },
+                                append = &gtk::Label {
+                                   set_label: "Default",
+                                   set_halign: gtk::Align::Center,
+                                   set_hexpand: true,
                                 },
                             },
 
@@ -77,18 +87,9 @@ impl SimpleComponent for AppearanceModel {
                                     set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
                                 },
 
-                                append = &gtk::Box {
-                                    set_orientation: gtk::Orientation::Horizontal,
-                                    set_halign: gtk::Align::Start,
-
-                                    append = &gtk::Box {
-                                        set_orientation: gtk::Orientation::Vertical,
-
-                                        append = &gtk::Label {
-                                            set_label: "Dark",
-                                            set_halign: gtk::Align::Center,
-                                        },
-                                    },
+                                append = &gtk::Label {
+                                  set_label: "Dark",
+                                  set_halign: gtk::Align::Center,
                                 },
                             },
                         }
