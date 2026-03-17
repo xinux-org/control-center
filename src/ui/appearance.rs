@@ -61,12 +61,21 @@ impl SimpleComponent for AppearanceModel {
 
                             append = &gtk::Box {
                                 set_orientation: gtk::Orientation::Vertical,
-                                set_spacing: 12,
+                                set_spacing: 6,
 
 
                                 append = &gtk::Frame {
+                                    // #[wrap(Some)]
+                                    // set_child = &gtk::ToggleButton::new().set_child(
+                                    //     Some(
+                                    //     &gtk::Picture::for_filename("/home/shahruz/.config/background"))
+                                    // ),
+                                        // child: &gtk::Picture::for_filename("/home/shahruz/.config/background"),
                                     #[wrap(Some)]
-                                    set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+                                    set_child = &gtk::ToggleButton{
+                                        #[wrap(Some)]
+                                        set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+                                    },
                                 },
 
                                 append = &gtk::Label {
@@ -78,13 +87,16 @@ impl SimpleComponent for AppearanceModel {
 
                             append = &gtk::Box {
                                 set_orientation: gtk::Orientation::Vertical,
-                                set_spacing: 12,
+                                set_spacing: 6,
 
                                 append = &gtk::Frame {
-                                    set_hexpand: true,
+                                    // set_hexpand: true,
 
                                     #[wrap(Some)]
-                                    set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+                                    set_child = &gtk::ToggleButton{
+                                        #[wrap(Some)]
+                                        set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+                                    },
                                 },
 
                                 append = &gtk::Label {
