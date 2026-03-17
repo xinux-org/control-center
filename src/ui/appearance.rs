@@ -25,98 +25,75 @@ impl SimpleComponent for AppearanceModel {
             },
             adw::PreferencesPage {
                 adw::PreferencesGroup {
-                    // set_title: "Devices",
-                    adw::ComboRow {
-                        set_title: "Orientantion",
-                        #[wrap(Some)]
-                        set_model = &gtk::StringList::new(&[
-                            "Landscape",
-                            "Portrait Right",
-                            "Portrait Left",
-                            "Landscape (flipped)",
-                        ]),
-                        set_selected: 0,
-                    },
-
-                    adw::ComboRow {
-                        set_title: "Resolution",
-                        #[wrap(Some)]
-                        set_model = &gtk::StringList::new(&[
-                            "3440 × 1440 (21:9)",
-                            "2560 × 1440 (16:9)",
-                            "1920 × 1080 (16:9)",
-                            "1680 × 1050 (16:10)",
-                            "1440 × 900 (16:10)",
-                            "1280 × 1024 (5:4)",
-                            "1024 × 768 (4:3)",
-                            "800 × 600 (4:3)",
-                        ]),
-                        set_selected: 0,
-                    },
-
-                    adw::ComboRow {
-                        set_title: "Refresh Rate",
-                        #[wrap(Some)]
-                        set_model = &gtk::StringList::new(&[
-                            "60.00 Hz",
-                            "50.00 Hz",
-                        ]),
-                        set_selected: 0,
-                    },
-
-                    adw::SwitchRow {
-                        set_title: "HDR (High Dynamic Range)"
-                    },
+                    set_title: "Style",
 
                     adw::ActionRow {
-                        set_title: "Scale",
-
                         add_suffix = &gtk::Box {
-                            set_spacing: 0,
-                            set_halign: gtk::Align::End,
-                            set_valign: gtk::Align::Center,
-                            add_css_class: "linked",
+                            set_orientation: gtk::Orientation::Horizontal,
+                            set_spacing: 24,
+                            set_homogeneous: true,
+                            set_hexpand: true,
+                            set_margin_top: 18,
+                            set_margin_bottom: 18,
+                            set_margin_start: 86,
+                            set_margin_end: 86,
 
-                            #[name="left"]
-                            gtk::ToggleButton {
-                                set_group: Some(&right),
-                                set_label: "100 %",
-                                set_active: true,
-                                // add_css_class: "flat",
+                            append = &gtk::Box {
+                                set_orientation: gtk::Orientation::Vertical,
+                                set_spacing: 12,
+
+
+                                append = &gtk::Frame {
+                                    #[wrap(Some)]
+                                    set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+                                },
+
+                                append = &gtk::Box {
+                                    set_orientation: gtk::Orientation::Horizontal,
+                                    set_halign: gtk::Align::Start,
+
+                                    append = &gtk::Box {
+                                        set_orientation: gtk::Orientation::Vertical,
+                                        set_hexpand: true,
+                                        set_halign: gtk::Align::Center,
+
+                                        append = &gtk::Label {
+                                            set_label: "Default",
+                                            set_halign: gtk::Align::Center,
+                                            set_hexpand: true,
+                                        },
+                                    },
+                                },
                             },
 
-                            #[name="right"]
-                            gtk::ToggleButton {
-                                set_label: "200 %",
-                                // add_css_class: "flat",
+                            append = &gtk::Box {
+                                set_orientation: gtk::Orientation::Vertical,
+                                set_spacing: 12,
+
+                                append = &gtk::Frame {
+                                    set_hexpand: true,
+
+                                    #[wrap(Some)]
+                                    set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+                                },
+
+                                append = &gtk::Box {
+                                    set_orientation: gtk::Orientation::Horizontal,
+                                    set_halign: gtk::Align::Start,
+
+                                    append = &gtk::Box {
+                                        set_orientation: gtk::Orientation::Vertical,
+
+                                        append = &gtk::Label {
+                                            set_label: "Dark",
+                                            set_halign: gtk::Align::Center,
+                                        },
+                                    },
+                                },
                             },
                         }
                     },
-                },
 
-                adw::PreferencesGroup {
-                    adw::ActionRow {
-                        set_title: "Night Light",
-                        set_activatable: true,
-
-                        add_prefix = &gtk::Image {
-                            set_icon_name: Some("night-light-symbolic"),
-                        },
-
-                        add_suffix = &gtk::Box {
-                            set_spacing: 12,
-                            set_halign: gtk::Align::End,
-
-                            gtk::Label {
-                                set_label: "Off",
-                                add_css_class: "dim-label",
-                            },
-
-                            gtk::Image {
-                                set_icon_name: Some("go-next-symbolic"),
-                            },
-                        }
-                    },
                 },
             }
         }
