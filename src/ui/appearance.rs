@@ -74,22 +74,22 @@ impl SimpleComponent for AppearanceModel {
 
                             append = &gtk::Box {
                                 set_orientation: gtk::Orientation::Vertical,
-                                set_spacing: 6,
+                                set_spacing: 18,
 
+                                #[name= "left" ]
+                                // #[wrap(Some)]
+                                append = &gtk::ToggleButton{
+                                    set_group: Some(&right),
+                                    set_overflow: gtk::Overflow::Hidden,
+                                    add_css_class: "style-toggle",
 
-                                append = &gtk::Frame {
                                     #[wrap(Some)]
-                                    set_child = &gtk::ToggleButton{
-                                        add_css_class: "style-toggle",
-
-                                        #[wrap(Some)]
-                                        set_child = &gtk::Picture{
-                                            set_content_fit: gtk::ContentFit::Fill,
-                                            set_filename: Some("/home/shahruz/.config/background"),
-                                        },
-
-                                        connect_clicked => AppearanceMsg::SetStyle(AppearanceStyle::Default),
+                                    set_child = &gtk::Picture{
+                                        set_content_fit: gtk::ContentFit::Fill,
+                                        set_filename: Some("/home/shahruz/.config/background"),
                                     },
+
+                                    connect_clicked => AppearanceMsg::SetStyle(AppearanceStyle::Default),
                                 },
 
                                 append = &gtk::Label {
@@ -101,19 +101,18 @@ impl SimpleComponent for AppearanceModel {
 
                             append = &gtk::Box {
                                 set_orientation: gtk::Orientation::Vertical,
-                                set_spacing: 6,
+                                set_spacing: 18,
 
-                                append = &gtk::Frame {
+                                #[name= "right" ]
+                                // #[wrap(Some)]
+                                append = &gtk::ToggleButton{
+                                    add_css_class: "style-toggle",
+                                    set_overflow: gtk::Overflow::Hidden,
 
                                     #[wrap(Some)]
-                                    set_child = &gtk::ToggleButton{
-                                        add_css_class: "style-toggle",
+                                    set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
 
-                                        #[wrap(Some)]
-                                        set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
-
-                                        connect_clicked => AppearanceMsg::SetStyle(AppearanceStyle::Dark),
-                                    },
+                                    connect_clicked => AppearanceMsg::SetStyle(AppearanceStyle::Dark),
                                 },
 
                                 append = &gtk::Label {
