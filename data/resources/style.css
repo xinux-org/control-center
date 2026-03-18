@@ -26,12 +26,12 @@
 .style-toggle {
   padding: 0px;
   background-color: rgba(0, 0, 0, 0);
-  border-radius: 8px;
+  border-radius: 6px;
   border: 2px none red;
   outline: rgba(0,0,0,0) solid 2px;
 
 }
 
-.style-toggle:focus-within{
+.style-toggle:checked{
   outline-color: var(--accent-color);
 }
