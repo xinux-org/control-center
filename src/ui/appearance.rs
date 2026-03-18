@@ -25,12 +25,25 @@ use relm4::prelude::*;
 // }
 
 #[derive(Debug, Clone, Copy)]
-pub struct AppearanceModel {}
+pub enum AppearanceStyle {
+    Default,
+    Dark,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct AppearanceModel {
+    style: AppearanceStyle,
+}
+
+#[derive(Debug)]
+pub enum AppearanceMsg {
+    SetStyle(AppearanceStyle),
+}
 
 #[relm4::component(pub)]
 impl SimpleComponent for AppearanceModel {
     type Init = ();
-    type Input = ();
+    type Input = AppearanceMsg;
     type Output = AppMsg;
 
     view! {
@@ -65,16 +78,17 @@ impl SimpleComponent for AppearanceModel {
 
 
                                 append = &gtk::Frame {
-                                    // #[wrap(Some)]
-                                    // set_child = &gtk::ToggleButton::new().set_child(
-                                    //     Some(
-                                    //     &gtk::Picture::for_filename("/home/shahruz/.config/background"))
-                                    // ),
-                                        // child: &gtk::Picture::for_filename("/home/shahruz/.config/background"),
                                     #[wrap(Some)]
                                     set_child = &gtk::ToggleButton{
+                                        add_css_class: "style-toggle",
+
                                         #[wrap(Some)]
-                                        set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+                                        set_child = &gtk::Picture{
+                                            set_content_fit: gtk::ContentFit::Fill,
+                                            set_filename: Some("/home/shahruz/.config/background"),
+                                        },
+
+                                        connect_clicked => AppearanceMsg::SetStyle(AppearanceStyle::Default),
                                     },
                                 },
 
@@ -90,12 +104,15 @@ impl SimpleComponent for AppearanceModel {
                                 set_spacing: 6,
 
                                 append = &gtk::Frame {
-                                    // set_hexpand: true,
 
                                     #[wrap(Some)]
                                     set_child = &gtk::ToggleButton{
+                                        add_css_class: "style-toggle",
+
                                         #[wrap(Some)]
                                         set_child = &gtk::Picture::for_filename("/home/shahruz/.config/background"),
+
+                                        connect_clicked => AppearanceMsg::SetStyle(AppearanceStyle::Dark),
                                     },
                                 },
 
@@ -117,8 +134,18 @@ impl SimpleComponent for AppearanceModel {
         root: Self::Root,
         _sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let model = Self {};
+        let style = AppearanceStyle::Default;
+        let model = AppearanceModel { style };
         let widgets = view_output!();
         ComponentParts { model, widgets }
+    }
+
+    fn update(&mut self, msg: Self::Input, _sender: ComponentSender<Self>) {
+        match msg {
+            AppearanceMsg::SetStyle(style) => {
+                self.style = style;
+                // self.add
+            }
+        }
     }
 }
