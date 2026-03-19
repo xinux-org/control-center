@@ -1,5 +1,4 @@
 // #[rustfmt::skip]
-
 use tracing::error;
 
 use gettextrs::{LocaleCategory, gettext};
@@ -10,10 +9,11 @@ use relm4::{
     actions::{AccelsPlus, RelmAction, RelmActionGroup},
     gtk, main_application,
 };
-use settings::config::{APP_ID, GETTEXT_PACKAGE, LOCALEDIR, RESOURCES_FILE};
-
-use settings::ui::load::load;
-use settings::ui::window::{App, AppInit};
+use settings::utils::modules::load::load;
+use settings::{
+    config::{APP_ID, GETTEXT_PACKAGE, LOCALEDIR, RESOURCES_FILE},
+    ui::window::{App, AppInit},
+};
 
 relm4::new_action_group!(AppActionGroup, "app");
 relm4::new_stateless_action!(QuitAction, AppActionGroup, "quit");
