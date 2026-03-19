@@ -15,17 +15,14 @@ use crate::ui::{
     power::PowerModel, privacyandsecurity::PrivacyAndSecurityModel, sharing::SharingModel,
     sound::SoundModel, system::SystemPageModel, wellbeing::WellbeingModel, wifi::WifiModel,
 };
-use crate::ui::{apps::AppModal, load::reload, rebuild::rebuild_dialog::RebuildInput};
+use crate::ui::{apps::AppModal, rebuild::rebuild_dialog::RebuildInput};
+use crate::utils::modules::load::LoadOutput;
 use crate::{
     config::{APP_ID, PROFILE},
     ui::rebuild::rebuild_dialog::{RebuildInit, RebuildModel},
 };
-use crate::{
-    ui::load::{LoadOutput, ReloadOutput},
-    utils::modules::ModuleOption,
-};
 
-use std::{collections::HashMap, convert::identity, fs, path::Path};
+use std::{convert::identity, fs, path::Path};
 
 pub struct App {
     _wifi: Controller<WifiModel>,
@@ -49,10 +46,10 @@ pub struct App {
     config: NixDataConfig,
     rebuild_dialog: Controller<RebuildModel>,
     // error_dialog: Controller<ErrorDialogModel>,
-    moduleconfig: String,
+    // moduleconfig: String,
 
-    current_config: HashMap<String, ModuleOption>,
-    modified_config: HashMap<String, ModuleOption>,
+    // current_config: HashMap<String, ModuleOption>,
+    // modified_config: HashMap<String, ModuleOption>,
 }
 
 pub struct AppInit {
@@ -192,14 +189,7 @@ impl SimpleComponent for App {
         root: Self::Root,
         sender: ComponentSender<Self>,
     ) -> ComponentParts<Self> {
-        let LoadOutput {
-            config,
-            moduleconfig,
-            modulepath,
-            flakepath,
-            modules,
-            current_config,
-        } = init.load;
+        let LoadOutput { config, flakepath } = init.load;
 
         let wifi = WifiModel::builder()
             .launch(())
@@ -257,7 +247,7 @@ impl SimpleComponent for App {
             .transient_for(&root)
             .launch(RebuildInit {
                 flakepath,
-                modulepath,
+                // modulepath,
                 generations: config.generations,
             })
             .forward(sender.input_sender(), identity);
@@ -284,10 +274,8 @@ impl SimpleComponent for App {
             _system: system,
 
             config,
-            moduleconfig,
             rebuild_dialog,
-            current_config,
-            modified_config: HashMap::new(),
+            // modified_config: HashMap::new(),
         };
 
         widgets.stack.connect_visible_child_notify({
@@ -347,31 +335,13 @@ impl SimpleComponent for App {
                 );
 
                 self.rebuild_dialog.emit(RebuildInput::Rebuild(
-                    self.modified_config.clone(),
+                    // self.modified_config.clone(),
                     output.to_owned(),
                     full_config_path.into_os_string().into_string().unwrap(),
                 ))
             }
-            AppMsg::Reload => match reload(&self.config) {
-                Ok(ReloadOutput {
-                    modules,
-                    current_config,
-                    moduleconfig,
-                }) => {
-                    self.current_config = current_config;
-                    self.moduleconfig = moduleconfig;
-                    self.modified_config.clear();
+            AppMsg::Reload => {}
 
-                    // self.main_leaflet.set_visible_child(&self.main_box);
-                    // self.modulepage.emit(ModulePageInput::ShowApply(false));
-                }
-                Err(e) => {
-                    // self.error_dialog.emit(ErrorDialogInput::Show(
-                    //     "Failed to reload current module configuration".to_string(),
-                    //     e.to_string(),
-                    // ));
-                }
-            },
             AppMsg::Quit => main_application().quit(),
         }
     }

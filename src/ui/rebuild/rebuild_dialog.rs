@@ -1,5 +1,4 @@
 use crate::ui::rebuild::utils::gt_status_msg;
-use crate::utils::modules::ModuleOption;
 use crate::{config::LIBEXECDIR, ui::window::AppMsg};
 use relm4::{
     ComponentParts, ComponentSender, SimpleComponent,
@@ -9,7 +8,7 @@ use relm4::{
         prelude::{ButtonExt, GtkWindowExt, OrientableExt, WidgetExt},
     },
 };
-use std::{collections::HashMap, path::PathBuf};
+use std::path::PathBuf;
 use tracing::{info, warn};
 use vte::{TerminalExt, TerminalExtManual};
 
@@ -20,21 +19,19 @@ pub struct RebuildModel {
     terminal: vte::Terminal,
 
     flakepath: PathBuf,
-    modulepath: PathBuf,
     generations: Option<u32>,
 }
 
 #[derive(Debug)]
 pub enum RebuildInput {
     // x, y (y is new .nix file in string), z (y path to write)
-    Rebuild(HashMap<String, ModuleOption>, String, String),
+    Rebuild(String, String),
     Close,
     SetStatus(RebuildStatus),
 }
 
 pub struct RebuildInit {
     pub flakepath: PathBuf,
-    pub modulepath: PathBuf,
     pub generations: Option<u32>,
 }
 
@@ -158,7 +155,6 @@ impl SimpleComponent for RebuildModel {
             status: RebuildStatus::Building,
             terminal: vte::Terminal::new(),
             flakepath: init.flakepath,
-            modulepath: init.modulepath,
             generations: init.generations,
             tracker: 0,
         };
@@ -170,7 +166,7 @@ impl SimpleComponent for RebuildModel {
     fn update(&mut self, message: Self::Input, sender: ComponentSender<Self>) {
         self.reset();
         match message {
-            RebuildInput::Rebuild(modified_config, output, target_config_file) => {
+            RebuildInput::Rebuild(output, target_config_file) => {
                 self.set_visible(true);
                 sender.input(RebuildInput::SetStatus(RebuildStatus::Building));
 
@@ -213,7 +209,7 @@ impl SimpleComponent for RebuildModel {
                     |_| (),
                 );
                 self.set_visible(false);
-                let _ = sender.output(AppMsg::Reload);
+                // let _ = sender.output(AppMsg::Reload);
             }
             RebuildInput::SetStatus(status) => {
                 self.set_status(status);
